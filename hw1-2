@@ -1,15 +1,19 @@
 #!/bin/bash
 
-echo "Franklin True Martin HW1 part 1: Creating 'outfiles' directory if not present"
+echo "Franklin True Martin HW1 part 2"
+echo "This project is created using Antlr4 Lexer/Parser, \
+and will output the time it takes for the files to be parsed \
+at the end."
+
+if [[ -z $2 ]] || [[ -z  $1 ]]; then
+	echo "Invalid input. Enter the input and ouput directories as arg1 and arg2"
+	exit 2
+fi
+
+echo "Creating output directory if not already present"
 
 mkdir $2 2>/dev/null
 
+java -jar target/AntlrHW1-1.0-SNAPSHOT-spring-boot.jar $1 $2 &> /dev/null
 
-for file in "$1"/*; do
-    if [ -f "$file" ]; then
-	baseFileName=$(basename "$file" .html) # Remove path and extention (.html)
-	rootFileName=("$1/$baseFileName".html) # File path from project directory 
-	java Lexer $rootFileName > "$2/$baseFileName".txt 
-    fi    
-done
-
+echo "Complete, output is in: $2" 
