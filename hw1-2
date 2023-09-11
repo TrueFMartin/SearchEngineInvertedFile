@@ -1,0 +1,15 @@
+#!/bin/bash
+
+echo "Franklin True Martin HW1 part 1: Creating 'outfiles' directory if not present"
+
+mkdir $2 2>/dev/null
+
+
+for file in "$1"/*; do
+    if [ -f "$file" ]; then
+	baseFileName=$(basename "$file" .html) # Remove path and extention (.html)
+	rootFileName=("$1/$baseFileName".html) # File path from project directory 
+	java Lexer $rootFileName > "$2/$baseFileName".txt 
+    fi    
+done
+

@@ -94,7 +94,7 @@ public class IRParserEvaluator extends IRParserBaseListener{
 
     @Override
     public void exitHandleInteger(IRParser.HandleIntegerContext ctx) {
-        print("exitInterger" + ctx.getText().replace(",", ""));
+        print(ctx.getText().replace(",", ""));
     }
 
     @Override
