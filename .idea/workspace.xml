@@ -5,18 +5,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8eac7903-1d8e-4d85-a7f4-c9bd47e8b102" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/antlr4/com/truefmartin/IRLexer.g4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/antlr4/com/truefmartin/IRParser.g4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/truefmartin/HTMLParser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/truefmartin/IRParserEvaluator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/AntlrHW1-1.0-SNAPSHOT-spring-boot.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gen/com/truefmartin/IRLexer.interp" beforeDir="false" afterPath="$PROJECT_DIR$/gen/com/truefmartin/IRLexer.interp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gen/com/truefmartin/IRLexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/gen/com/truefmartin/IRLexer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/antlr4/com/truefmartin/IRLexer.g4" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/antlr4/com/truefmartin/IRLexer.g4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/AntlrHW1-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/AntlrHW1-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/HTMLParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/HTMLParser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRLexer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRLexer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$ContentOptionsContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$ContentOptionsContext.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$ContentTextContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$ContentTextContext.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$DocumentContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$DocumentContext.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$HandleIntegerContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$HandleIntegerContext.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$HtmlContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$HtmlContext.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$InternalTagContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$InternalTagContext.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$NoTagStartContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$NoTagStartContext.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$OutOfTagCleanContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$OutOfTagCleanContext.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$OutOfTagContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$OutOfTagContext.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$OutOfTagDirtyContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$OutOfTagDirtyContext.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$TagContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$TagContext.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$TagStartContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$TagStartContext.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParserBaseListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParserBaseListener.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParserEvaluator.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParserEvaluator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParserListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParserListener.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/antlr4/com/truefmartin/IRLexer.interp" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/antlr4/com/truefmartin/IRLexer.interp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/antlr4/com/truefmartin/IRLexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/antlr4/com/truefmartin/IRLexer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/antlr4/dependencies.ser" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/antlr4/dependencies.ser" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,13 +72,13 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/truef/OneDrive - University of Arkansas/School/InfoRet/AntlrHW1/src/main/resources/testfiles/medium.html",
+    "last_opened_file_path": "C:/Java",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
+    "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices",
@@ -124,6 +141,7 @@
       <option name="presentableId" value="Default" />
       <updated>1694328369701</updated>
       <workItem from="1694328371106" duration="72019000" />
+      <workItem from="1694574733645" duration="4624000" />
     </task>
     <servers />
   </component>

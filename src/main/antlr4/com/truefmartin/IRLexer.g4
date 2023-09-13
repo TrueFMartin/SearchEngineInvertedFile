@@ -2,8 +2,8 @@ lexer grammar IRLexer;
 
 
 // Tag open and close
-TAG_START: '<' [A-Za-z]+? '>';
-TAG_END: '</' [A-Za-z]+ '>';
+TAG_START: '<' [A-Za-z0-9]+? '>';
+TAG_END: '</' [A-Za-z0-9]+ '>';
 TAG_START_OPEN: '<' [A-Za-z0-9]+ ' ' -> mode(IN_TAG);
 
 URL: ( 'http://' | 'https://' )? 'www' ([A-Za-z0-9.\-_]+? ( '.' )+)+ (PLAIN_TEXT|[0-9-_'./\\~,`!@#$%^&*():;<>{}])+?;
