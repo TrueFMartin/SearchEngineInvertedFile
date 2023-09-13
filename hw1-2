@@ -14,6 +14,6 @@ echo "Creating output directory if not already present"
 
 mkdir $2 2>/dev/null
 
-java -jar target/AntlrHW1-1.0-SNAPSHOT-spring-boot.jar $1 $2 &> /dev/null
+time (java -jar target/hw1-2-spring-boot.jar $1 $2 &> /dev/null)
 
 echo "Complete, output is in: $2" 
