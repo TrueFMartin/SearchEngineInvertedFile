@@ -22,7 +22,7 @@ OTHER: .+?;
 
 mode COMMENT;
 COMMENT_END: '--' '!'? '>' -> skip,  popMode;
-COMMENT_CONTENT: .*  -> skip;
+COMMENT_CONTENT_SKIP: .*  -> skip;
 
 // The space indicated by XXX: <tagName XXX >
 mode IN_TAG;

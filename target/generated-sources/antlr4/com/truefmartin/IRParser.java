@@ -1,4 +1,4 @@
-// Generated from com\truefmartin\IRParser.g4 by ANTLR 4.12.0
+// Generated from com/truefmartin/IRParser.g4 by ANTLR 4.12.0
 package com.truefmartin;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -17,12 +17,13 @@ public class IRParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		TAG_START=1, TAG_END=2, TAG_START_OPEN=3, URL=4, EMAIL=5, FLOAT=6, PUNCT=7, 
-		INTEGER=8, PLAIN_TEXT=9, TEXT_WITH_PUNCTUATION=10, NEW_LINE=11, WS=12, 
-		OTHER=13, TAG_START_CLOSE=14, IN_TAG_URL=15, CONTENT_START=16, ATTRIBUTE_IGNORE=17, 
-		FILLER=18, TAG_WS=19, AWS=20, CONTENT_CLOSE=21, CONTENT_FLOAT=22, CONTENT_INTEGER=23, 
-		CONTENT_EMAIL=24, CONTENT_TEXT=25, CONTENT_PUNCTUATION=26, CONTENT_WS=27, 
-		TEXT_WITH_PUNCUATION=28;
+		TAG_START=1, TAG_END=2, TAG_START_OPEN=3, COMMENT_START=4, URL=5, EMAIL=6, 
+		FLOAT=7, PUNCT=8, INTEGER=9, PLAIN_TEXT=10, TEXT_WITH_PUNCTUATION=11, 
+		NEW_LINE=12, WS=13, OTHER=14, COMMENT_END=15, COMMENT_CONTENT_SKIP=16, 
+		TAG_START_CLOSE=17, IN_TAG_URL=18, CONTENT_START=19, ATTRIBUTE_IGNORE=20, 
+		FILLER=21, TAG_WS=22, AWS=23, CONTENT_CLOSE=24, CONTENT_FLOAT=25, CONTENT_INTEGER=26, 
+		CONTENT_EMAIL=27, CONTENT_TEXT=28, CONTENT_PUNCTUATION=29, CONTENT_WS=30, 
+		TEXT_WITH_PUNCUATION=31;
 	public static final int
 		RULE_document = 0, RULE_html = 1, RULE_tagStart = 2, RULE_tag = 3, RULE_noTagStart = 4, 
 		RULE_outOfTag = 5, RULE_outOfTagDirty = 6, RULE_outOfTagClean = 7, RULE_internalTag = 8, 
@@ -37,20 +38,20 @@ public class IRParser extends Parser {
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
+			null, null, null, null, "'<!--'", null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, null, null, null, null, "'\"'", null, null, 
-			null, null, null, "' '"
+			null, "'\"'", null, null, null, null, null, "' '"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "TAG_START", "TAG_END", "TAG_START_OPEN", "URL", "EMAIL", "FLOAT", 
-			"PUNCT", "INTEGER", "PLAIN_TEXT", "TEXT_WITH_PUNCTUATION", "NEW_LINE", 
-			"WS", "OTHER", "TAG_START_CLOSE", "IN_TAG_URL", "CONTENT_START", "ATTRIBUTE_IGNORE", 
-			"FILLER", "TAG_WS", "AWS", "CONTENT_CLOSE", "CONTENT_FLOAT", "CONTENT_INTEGER", 
-			"CONTENT_EMAIL", "CONTENT_TEXT", "CONTENT_PUNCTUATION", "CONTENT_WS", 
-			"TEXT_WITH_PUNCUATION"
+			null, "TAG_START", "TAG_END", "TAG_START_OPEN", "COMMENT_START", "URL", 
+			"EMAIL", "FLOAT", "PUNCT", "INTEGER", "PLAIN_TEXT", "TEXT_WITH_PUNCTUATION", 
+			"NEW_LINE", "WS", "OTHER", "COMMENT_END", "COMMENT_CONTENT_SKIP", "TAG_START_CLOSE", 
+			"IN_TAG_URL", "CONTENT_START", "ATTRIBUTE_IGNORE", "FILLER", "TAG_WS", 
+			"AWS", "CONTENT_CLOSE", "CONTENT_FLOAT", "CONTENT_INTEGER", "CONTENT_EMAIL", 
+			"CONTENT_TEXT", "CONTENT_PUNCTUATION", "CONTENT_WS", "TEXT_WITH_PUNCUATION"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -147,7 +148,7 @@ public class IRParser extends Parser {
 				setState(27); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 276826942L) != 0) );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 2214598254L) != 0) );
 			setState(29);
 			match(EOF);
 			}
@@ -537,7 +538,7 @@ public class IRParser extends Parser {
 					setState(70); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 276824880L) != 0) );
+				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 2214594144L) != 0) );
 				setState(75);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,11,_ctx);
@@ -727,7 +728,7 @@ public class IRParser extends Parser {
 			{
 			setState(92);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 560L) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 1120L) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -875,7 +876,7 @@ public class IRParser extends Parser {
 					setState(105); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 192938240L) != 0) );
+				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 1543504384L) != 0) );
 				setState(107);
 				match(CONTENT_CLOSE);
 				}
@@ -1016,7 +1017,7 @@ public class IRParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001\u001cw\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0004\u0001\u001fw\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
 		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
 		"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0002"+
 		"\b\u0007\b\u0002\t\u0007\t\u0002\n\u0007\n\u0002\u000b\u0007\u000b\u0001"+
@@ -1034,8 +1035,8 @@ public class IRParser extends Parser {
 		"\b\u0001\b\u0001\b\u0001\t\u0001\t\u0001\t\u0004\th\b\t\u000b\t\f\ti\u0001"+
 		"\t\u0001\t\u0003\tn\b\t\u0001\n\u0001\n\u0001\n\u0003\ns\b\n\u0001\u000b"+
 		"\u0001\u000b\u0001\u000b\u000417@K\u0000\f\u0000\u0002\u0004\u0006\b\n"+
-		"\f\u000e\u0010\u0012\u0014\u0016\u0000\u0002\u0002\u0000\u0004\u0005\t"+
-		"\t\u0002\u0000\b\b\u0017\u0017\u0081\u0000\u0019\u0001\u0000\u0000\u0000"+
+		"\f\u000e\u0010\u0012\u0014\u0016\u0000\u0002\u0002\u0000\u0005\u0006\n"+
+		"\n\u0002\u0000\t\t\u001a\u001a\u0081\u0000\u0019\u0001\u0000\u0000\u0000"+
 		"\u0002!\u0001\u0000\u0000\u0000\u0004:\u0001\u0000\u0000\u0000\u0006@"+
 		"\u0001\u0000\u0000\u0000\bS\u0001\u0000\u0000\u0000\nX\u0001\u0000\u0000"+
 		"\u0000\fZ\u0001\u0000\u0000\u0000\u000e\\\u0001\u0000\u0000\u0000\u0010"+
@@ -1047,45 +1048,44 @@ public class IRParser extends Parser {
 		"\u0000\u0001\u001e\u0001\u0001\u0000\u0000\u0000\u001f\"\u0003\u0004\u0002"+
 		"\u0000 \"\u0003\b\u0004\u0000!\u001f\u0001\u0000\u0000\u0000! \u0001\u0000"+
 		"\u0000\u0000!\"\u0001\u0000\u0000\u0000\"$\u0001\u0000\u0000\u0000#%\u0005"+
-		"\u000b\u0000\u0000$#\u0001\u0000\u0000\u0000%&\u0001\u0000\u0000\u0000"+
-		"&$\u0001\u0000\u0000\u0000&\'\u0001\u0000\u0000\u0000\'\u0003\u0001\u0000"+
-		"\u0000\u0000(*\u0005\u0001\u0000\u0000)(\u0001\u0000\u0000\u0000*+\u0001"+
-		"\u0000\u0000\u0000+)\u0001\u0000\u0000\u0000+,\u0001\u0000\u0000\u0000"+
-		",-\u0001\u0000\u0000\u0000-;\u0003\u0006\u0003\u0000.0\u0003\u0010\b\u0000"+
-		"/.\u0001\u0000\u0000\u000001\u0001\u0000\u0000\u000012\u0001\u0000\u0000"+
-		"\u00001/\u0001\u0000\u0000\u000027\u0001\u0000\u0000\u000036\u0003\n\u0005"+
-		"\u000046\u0005\u0002\u0000\u000053\u0001\u0000\u0000\u000054\u0001\u0000"+
-		"\u0000\u000069\u0001\u0000\u0000\u000078\u0001\u0000\u0000\u000075\u0001"+
-		"\u0000\u0000\u00008;\u0001\u0000\u0000\u000097\u0001\u0000\u0000\u0000"+
-		":)\u0001\u0000\u0000\u0000:/\u0001\u0000\u0000\u0000;\u0005\u0001\u0000"+
-		"\u0000\u0000<?\u0003\n\u0005\u0000=?\u0005\u0002\u0000\u0000><\u0001\u0000"+
-		"\u0000\u0000>=\u0001\u0000\u0000\u0000?B\u0001\u0000\u0000\u0000@A\u0001"+
-		"\u0000\u0000\u0000@>\u0001\u0000\u0000\u0000A\u0007\u0001\u0000\u0000"+
-		"\u0000B@\u0001\u0000\u0000\u0000CE\u0003\n\u0005\u0000DC\u0001\u0000\u0000"+
-		"\u0000EF\u0001\u0000\u0000\u0000FD\u0001\u0000\u0000\u0000FG\u0001\u0000"+
-		"\u0000\u0000GK\u0001\u0000\u0000\u0000HJ\u0005\u0002\u0000\u0000IH\u0001"+
-		"\u0000\u0000\u0000JM\u0001\u0000\u0000\u0000KL\u0001\u0000\u0000\u0000"+
-		"KI\u0001\u0000\u0000\u0000LT\u0001\u0000\u0000\u0000MK\u0001\u0000\u0000"+
-		"\u0000NP\u0005\u0002\u0000\u0000ON\u0001\u0000\u0000\u0000PQ\u0001\u0000"+
-		"\u0000\u0000QO\u0001\u0000\u0000\u0000QR\u0001\u0000\u0000\u0000RT\u0001"+
-		"\u0000\u0000\u0000SD\u0001\u0000\u0000\u0000SO\u0001\u0000\u0000\u0000"+
-		"T\t\u0001\u0000\u0000\u0000UY\u0003\u000e\u0007\u0000VY\u0003\f\u0006"+
-		"\u0000WY\u0003\u0016\u000b\u0000XU\u0001\u0000\u0000\u0000XV\u0001\u0000"+
-		"\u0000\u0000XW\u0001\u0000\u0000\u0000Y\u000b\u0001\u0000\u0000\u0000"+
-		"Z[\u0005\u001c\u0000\u0000[\r\u0001\u0000\u0000\u0000\\]\u0007\u0000\u0000"+
-		"\u0000]\u000f\u0001\u0000\u0000\u0000^`\u0005\u0003\u0000\u0000_a\u0003"+
-		"\u0012\t\u0000`_\u0001\u0000\u0000\u0000`a\u0001\u0000\u0000\u0000ab\u0001"+
-		"\u0000\u0000\u0000bc\u0005\u000e\u0000\u0000c\u0011\u0001\u0000\u0000"+
-		"\u0000dg\u0005\u0010\u0000\u0000eh\u0003\u0014\n\u0000fh\u0005\u001b\u0000"+
-		"\u0000ge\u0001\u0000\u0000\u0000gf\u0001\u0000\u0000\u0000hi\u0001\u0000"+
-		"\u0000\u0000ig\u0001\u0000\u0000\u0000ij\u0001\u0000\u0000\u0000jk\u0001"+
-		"\u0000\u0000\u0000kn\u0005\u0015\u0000\u0000ln\u0005\u000f\u0000\u0000"+
-		"md\u0001\u0000\u0000\u0000ml\u0001\u0000\u0000\u0000n\u0013\u0001\u0000"+
-		"\u0000\u0000os\u0005\u0019\u0000\u0000ps\u0003\u0016\u000b\u0000qs\u0005"+
-		"\u0018\u0000\u0000ro\u0001\u0000\u0000\u0000rp\u0001\u0000\u0000\u0000"+
-		"rq\u0001\u0000\u0000\u0000s\u0015\u0001\u0000\u0000\u0000tu\u0007\u0001"+
-		"\u0000\u0000u\u0017\u0001\u0000\u0000\u0000\u0014\u001b!&+157:>@FKQSX"+
-		"`gimr";
+		"\f\u0000\u0000$#\u0001\u0000\u0000\u0000%&\u0001\u0000\u0000\u0000&$\u0001"+
+		"\u0000\u0000\u0000&\'\u0001\u0000\u0000\u0000\'\u0003\u0001\u0000\u0000"+
+		"\u0000(*\u0005\u0001\u0000\u0000)(\u0001\u0000\u0000\u0000*+\u0001\u0000"+
+		"\u0000\u0000+)\u0001\u0000\u0000\u0000+,\u0001\u0000\u0000\u0000,-\u0001"+
+		"\u0000\u0000\u0000-;\u0003\u0006\u0003\u0000.0\u0003\u0010\b\u0000/.\u0001"+
+		"\u0000\u0000\u000001\u0001\u0000\u0000\u000012\u0001\u0000\u0000\u0000"+
+		"1/\u0001\u0000\u0000\u000027\u0001\u0000\u0000\u000036\u0003\n\u0005\u0000"+
+		"46\u0005\u0002\u0000\u000053\u0001\u0000\u0000\u000054\u0001\u0000\u0000"+
+		"\u000069\u0001\u0000\u0000\u000078\u0001\u0000\u0000\u000075\u0001\u0000"+
+		"\u0000\u00008;\u0001\u0000\u0000\u000097\u0001\u0000\u0000\u0000:)\u0001"+
+		"\u0000\u0000\u0000:/\u0001\u0000\u0000\u0000;\u0005\u0001\u0000\u0000"+
+		"\u0000<?\u0003\n\u0005\u0000=?\u0005\u0002\u0000\u0000><\u0001\u0000\u0000"+
+		"\u0000>=\u0001\u0000\u0000\u0000?B\u0001\u0000\u0000\u0000@A\u0001\u0000"+
+		"\u0000\u0000@>\u0001\u0000\u0000\u0000A\u0007\u0001\u0000\u0000\u0000"+
+		"B@\u0001\u0000\u0000\u0000CE\u0003\n\u0005\u0000DC\u0001\u0000\u0000\u0000"+
+		"EF\u0001\u0000\u0000\u0000FD\u0001\u0000\u0000\u0000FG\u0001\u0000\u0000"+
+		"\u0000GK\u0001\u0000\u0000\u0000HJ\u0005\u0002\u0000\u0000IH\u0001\u0000"+
+		"\u0000\u0000JM\u0001\u0000\u0000\u0000KL\u0001\u0000\u0000\u0000KI\u0001"+
+		"\u0000\u0000\u0000LT\u0001\u0000\u0000\u0000MK\u0001\u0000\u0000\u0000"+
+		"NP\u0005\u0002\u0000\u0000ON\u0001\u0000\u0000\u0000PQ\u0001\u0000\u0000"+
+		"\u0000QO\u0001\u0000\u0000\u0000QR\u0001\u0000\u0000\u0000RT\u0001\u0000"+
+		"\u0000\u0000SD\u0001\u0000\u0000\u0000SO\u0001\u0000\u0000\u0000T\t\u0001"+
+		"\u0000\u0000\u0000UY\u0003\u000e\u0007\u0000VY\u0003\f\u0006\u0000WY\u0003"+
+		"\u0016\u000b\u0000XU\u0001\u0000\u0000\u0000XV\u0001\u0000\u0000\u0000"+
+		"XW\u0001\u0000\u0000\u0000Y\u000b\u0001\u0000\u0000\u0000Z[\u0005\u001f"+
+		"\u0000\u0000[\r\u0001\u0000\u0000\u0000\\]\u0007\u0000\u0000\u0000]\u000f"+
+		"\u0001\u0000\u0000\u0000^`\u0005\u0003\u0000\u0000_a\u0003\u0012\t\u0000"+
+		"`_\u0001\u0000\u0000\u0000`a\u0001\u0000\u0000\u0000ab\u0001\u0000\u0000"+
+		"\u0000bc\u0005\u0011\u0000\u0000c\u0011\u0001\u0000\u0000\u0000dg\u0005"+
+		"\u0013\u0000\u0000eh\u0003\u0014\n\u0000fh\u0005\u001e\u0000\u0000ge\u0001"+
+		"\u0000\u0000\u0000gf\u0001\u0000\u0000\u0000hi\u0001\u0000\u0000\u0000"+
+		"ig\u0001\u0000\u0000\u0000ij\u0001\u0000\u0000\u0000jk\u0001\u0000\u0000"+
+		"\u0000kn\u0005\u0018\u0000\u0000ln\u0005\u0012\u0000\u0000md\u0001\u0000"+
+		"\u0000\u0000ml\u0001\u0000\u0000\u0000n\u0013\u0001\u0000\u0000\u0000"+
+		"os\u0005\u001c\u0000\u0000ps\u0003\u0016\u000b\u0000qs\u0005\u001b\u0000"+
+		"\u0000ro\u0001\u0000\u0000\u0000rp\u0001\u0000\u0000\u0000rq\u0001\u0000"+
+		"\u0000\u0000s\u0015\u0001\u0000\u0000\u0000tu\u0007\u0001\u0000\u0000"+
+		"u\u0017\u0001\u0000\u0000\u0000\u0014\u001b!&+157:>@FKQSX`gimr";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
