@@ -36,5 +36,8 @@ build/
 ### Mac OS ###
 .DS_Storeoutfiles/
 outfiles/
+<<<<<<< HEAD
 outfiles-bk/
 test/
+=======
+>>>>>>> 0ce11fa (gitignore)
