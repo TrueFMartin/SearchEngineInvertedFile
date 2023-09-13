@@ -1,0 +1,12 @@
+# !/bin/bash
+
+cat outfiles/* | sort | uniq -dc > sorting/count-no-unique-no-sort 
+sort -k 1nr sorting/count-no-unique-no-sort > sorting/count-no-unique-sorted
+cat outfiles/* | sort| uniq -u -c > sorting/uniques-with-count
+cat sorting/uniques-with-count >> sorting/count-no-unique-sorted
+mv sorting/count-no-unique-sorted sorting/sort-by-count
+sort -k 2 sorting/sort-by-count > sorting/sort-by-alpha
+
+rm sorting/count-no-unique-no-sort sorting/uniques-with-count 
+
+echo "Sort by count and alphabetically complete"

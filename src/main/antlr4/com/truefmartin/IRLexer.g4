@@ -2,10 +2,12 @@ lexer grammar IRLexer;
 
 
 // Tag open and close
-TAG_START: '<' [A-Za-z0-9]+? '>';
-TAG_END: '</' [A-Za-z0-9]+ '>';
+TAG_START: '<' '!'? [A-Za-z0-9]+? '>';
+TAG_END: '</' '!'? [A-Za-z0-9]+ '>';
 // The opening of a tag with attributes, e.g. <IMG someatributes=here..
 TAG_START_OPEN: '<' [A-Za-z0-9]+ ' ' -> mode(IN_TAG);
+
+COMMENT_START: '<!--' -> skip, mode(COMMENT);
 
 URL: ( 'http://' | 'https://' )? 'www' ([A-Za-z0-9.\-_]+? ( '.' )+)+ (PLAIN_TEXT|[0-9-_'./\\~,`!@#$%^&*():;<>{}])+?;
 EMAIL: [A-Za-z0-9.\-_]+? '@' [A-Za-z0-9.\-_]+ '.' [a-z][a-z][a-z]?;
@@ -17,6 +19,10 @@ TEXT_WITH_PUNCTUATION: (PLAIN_TEXT|[0-9-_'./\\~,`!@#$%^&*():;<>{}])+?;
 NEW_LINE: ('/r'? '\n');
 WS: (' '|'\t'|'\r'? '\n')+ -> skip;
 OTHER: .+?;
+
+mode COMMENT;
+COMMENT_END: '--' '!'? '>' -> skip,  popMode;
+COMMENT_CONTENT: .*  -> skip;
 
 // The space indicated by XXX: <tagName XXX >
 mode IN_TAG;
