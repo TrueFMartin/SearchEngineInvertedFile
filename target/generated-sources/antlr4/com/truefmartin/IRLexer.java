@@ -1,4 +1,4 @@
-// Generated from com/truefmartin/IRLexer.g4 by ANTLR 4.12.0
+// Generated from com\truefmartin\IRLexer.g4 by ANTLR 4.12.0
 package com.truefmartin;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
