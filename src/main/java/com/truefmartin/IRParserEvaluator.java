@@ -15,7 +15,7 @@ public class IRParserEvaluator extends IRParserBaseListener{
     private static final Pattern PUNCTUATION =
             Pattern.compile("[,-_./=:;<>?@\\[\\]{|}~!\"#$^`%&'()*+]");
     private static final Pattern CONTENT_START =
-            Pattern.compile("[a-z]+?=\"");
+            Pattern.compile("[a-z]+?=\"\\{?");
 
 
     public IRParserEvaluator(String inputFileName, String outFileDir, long initBufferSize) {
