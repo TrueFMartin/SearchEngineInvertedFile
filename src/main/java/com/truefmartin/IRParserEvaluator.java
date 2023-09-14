@@ -10,6 +10,8 @@ import java.util.regex.Pattern;
 public class IRParserEvaluator extends IRParserBaseListener{
     private String outputFileName;
     private StringBuilder outputBuilder;
+
+    // UNUSED! but here for future use
     private static final Pattern PUNCTUATION =
             Pattern.compile("[,-_./=:;<>?@\\[\\]{|}~!\"#$^`%&'()*+]");
     private static final Pattern CONTENT_START =
@@ -26,10 +28,13 @@ public class IRParserEvaluator extends IRParserBaseListener{
 
         if(outFileDir.endsWith("/"))
             outFileDir =  outFileDir.substring(0, outFileDir.length()-1);
+        // End with an output of the form "outfile/someFile.html"
         this.outputFileName = outFileDir + inputFileName;
         outputBuilder = new StringBuilder((int) initBufferSize);
     }
 
+    // Called by every listener that has content to output,
+    // Adds a new line and sets to lower case
     private void print(String s) {
         outputBuilder.append(s.toLowerCase()).append("\n");
     }
@@ -48,6 +53,7 @@ public class IRParserEvaluator extends IRParserBaseListener{
         }
     }
 
+    // UNUSED! but here for future use
     public static String removePunctuation(String s) {
         return PUNCTUATION.matcher(s).replaceAll("");
     }
@@ -65,6 +71,7 @@ public class IRParserEvaluator extends IRParserBaseListener{
         }
     }
 
+    // At end of document, write everything to output file
     @Override
     public void exitDocument(IRParser.DocumentContext ctx) {
         System.out.println("Exiting Document");
@@ -75,13 +82,14 @@ public class IRParserEvaluator extends IRParserBaseListener{
         }
     }
 
-
+    // Clean text that needs no modification
     @Override
     public void exitOutOfTagClean(IRParser.OutOfTagCleanContext ctx) {
         print(ctx.getText());
     }
 
-
+    // The text that is in the content part of: <IMG content="XXX somethingElse", or <IMG alt="XXX somethingElse"
+    // Clean up the XXX
     @Override
     public void exitContentText(IRParser.ContentTextContext ctx) {
         if (ctx.IN_TAG_URL() != null) {
@@ -92,11 +100,7 @@ public class IRParserEvaluator extends IRParserBaseListener{
         }
     }
 
-    @Override
-    public void exitHandleInteger(IRParser.HandleIntegerContext ctx) {
-        print(ctx.getText().replace(",", ""));
-    }
-
+    // Print the rest of content="somethingElse XXX"
     @Override
     public void exitContentOptions(IRParser.ContentOptionsContext ctx) {
         if (ctx.CONTENT_TEXT() != null) {
@@ -105,5 +109,11 @@ public class IRParserEvaluator extends IRParserBaseListener{
         if (ctx.CONTENT_EMAIL() != null) {
             print(ctx.CONTENT_EMAIL().toString());
         }
+    }
+
+    // Remove commas from integers
+    @Override
+    public void exitHandleInteger(IRParser.HandleIntegerContext ctx) {
+        print(ctx.getText().replace(",", ""));
     }
 }

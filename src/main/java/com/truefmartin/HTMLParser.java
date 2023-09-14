@@ -4,7 +4,6 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
 import java.io.File;
-import java.io.FileDescriptor;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,17 +17,14 @@ import java.util.stream.Stream;
 public class HTMLParser {
     private static String outFileDir;
     public static void main(String[] args) {
-        String inFileDir = args.length == 2 ? args[0]: "C:\\Users\\truef\\OneDrive - University of Arkansas\\School\\InfoRet\\AntlrHW1\\target\\classes\\testfiles";
-        outFileDir = args.length == 2 ? args[1]: "/outfiles";
+        String inFileDir = args.length == 2 ? args[0]: "files";
+        outFileDir = args.length == 2 ? args[1]: "outfiles";
 
-        System.out.println(Paths.get(outFileDir).toAbsolutePath());
-        System.out.println(Paths.get(inFileDir).toAbsolutePath());
-        // Specify the number of threads you want to use
+        // Get max number of processors as possible
         int numThreads = Runtime.getRuntime().availableProcessors();
         ExecutorService executor = Executors.newFixedThreadPool(numThreads);
 
-        // List of HTML files to process
-
+        // Get a map of FileName to FileLength in bytes
         Map<String, Long> htmlFiles = getHTMLFilesFromDirectory(inFileDir);
 
         // Create a list of Callable tasks for parsing
@@ -42,7 +38,7 @@ public class HTMLParser {
         }
 
         try {
-            // Invoke all tasks in parallel
+            // Invoke tasks in parrallel, err parallell, pearal? parallel!
             executor.invokeAll(tasks);
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -52,8 +48,7 @@ public class HTMLParser {
     }
 
     private static void parseHTMLFile(String filePath, Long fileSize) {
-        IRLexer lexer = null;
-        int fileLength;
+        IRLexer lexer;
         try {
             lexer = new IRLexer(CharStreams.fromFileName(filePath));
         } catch (IOException e) {
@@ -62,16 +57,13 @@ public class HTMLParser {
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         IRParser parser = new IRParser(tokens);
 
-        // Create an instance of your custom listener
+        // Create an instance of listener that handles exiting of rules
         IRParserBaseListener customListener = new IRParserEvaluator(filePath, outFileDir, fileSize);
 
-        // Attach the custom listener to the parser
         parser.addParseListener(customListener);
 
-        // Start the parsing process
+        // Begin parsing
         IRParser.DocumentContext documentContext = parser.document();
-//         Process the parsed data as needed
-
     }
 
     private static Map<String, Long> getHTMLFilesFromDirectory(String directoryPath) {
@@ -84,7 +76,5 @@ public class HTMLParser {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        // Implement logic to retrieve a list of HTML files in the specified directory
-        // You can use File.listFiles() or other file-handling libraries
     }
 }
