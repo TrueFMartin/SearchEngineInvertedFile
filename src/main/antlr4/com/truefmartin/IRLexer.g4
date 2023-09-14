@@ -10,7 +10,7 @@ TAG_START_OPEN: '<' [A-Za-z0-9]+ ' ' -> mode(IN_TAG);
 COMMENT_START: '<!--' -> skip, mode(COMMENT);
 
 URL: ( 'http://' | 'https://' )? 'www' ([A-Za-z0-9.\-_]+? ( '.' )+)+ (PLAIN_TEXT|[0-9-_'./\\~,`!@#$%^&*():;<>{}])+?;
-EMAIL: [A-Za-z0-9.\-_]+? '@' [A-Za-z0-9.\-_]+ '.' [a-z][a-z][a-z]?;
+EMAIL: [A-Za-z0-9.\-_:]+? '@' [A-Za-z0-9.\-_]+ '.' [a-z][a-z][a-z]?;
 FLOAT: INTEGER'.'INTEGER~'.' -> skip;
 PUNCT: [-_'./\\~,`!@#$%^&*():;<>{}]+? -> skip;
 INTEGER: [0-9,]+;
@@ -27,8 +27,9 @@ COMMENT_CONTENT_SKIP: .*  -> skip;
 // The space indicated by XXX: <tagName XXX >
 mode IN_TAG;
 TAG_START_CLOSE: ('>'|'/>') -> mode(DEFAULT_MODE);
-IN_TAG_URL: 'href="' URL '"';
-CONTENT_START: ('content'|'alt')'="' TEXT_WITH_PUNCTUATION-> mode(CONTENT_MODE);
+IN_TAG_URL: ('href'|'HREF') ' '? '="' (URL|EMAIL) '"';
+CONTENT_START_IGNORE: ('content'|'alt')'="'[$@!*#]+?'"'-> skip;
+CONTENT_START: ('content'|'alt')'="'TEXT_WITH_PUNCTUATION-> mode(CONTENT_MODE);
 ATTRIBUTE_IGNORE: PLAIN_TEXT'="'PLAIN_TEXT'"' -> skip;
 FILLER: PLAIN_TEXT -> skip;
 TAG_WS: WS -> skip;

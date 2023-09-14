@@ -1,4 +1,4 @@
-// Generated from com/truefmartin/IRParser.g4 by ANTLR 4.12.0
+// Generated from com\truefmartin\IRParser.g4 by ANTLR 4.12.0
 package com.truefmartin;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -20,10 +20,10 @@ public class IRParser extends Parser {
 		TAG_START=1, TAG_END=2, TAG_START_OPEN=3, COMMENT_START=4, URL=5, EMAIL=6, 
 		FLOAT=7, PUNCT=8, INTEGER=9, PLAIN_TEXT=10, TEXT_WITH_PUNCTUATION=11, 
 		NEW_LINE=12, WS=13, OTHER=14, COMMENT_END=15, COMMENT_CONTENT_SKIP=16, 
-		TAG_START_CLOSE=17, IN_TAG_URL=18, CONTENT_START=19, ATTRIBUTE_IGNORE=20, 
-		FILLER=21, TAG_WS=22, AWS=23, CONTENT_CLOSE=24, CONTENT_FLOAT=25, CONTENT_INTEGER=26, 
-		CONTENT_EMAIL=27, CONTENT_TEXT=28, CONTENT_PUNCTUATION=29, CONTENT_WS=30, 
-		TEXT_WITH_PUNCUATION=31;
+		TAG_START_CLOSE=17, IN_TAG_URL=18, CONTENT_START_IGNORE=19, CONTENT_START=20, 
+		ATTRIBUTE_IGNORE=21, FILLER=22, TAG_WS=23, AWS=24, CONTENT_CLOSE=25, CONTENT_FLOAT=26, 
+		CONTENT_INTEGER=27, CONTENT_EMAIL=28, CONTENT_TEXT=29, CONTENT_PUNCTUATION=30, 
+		CONTENT_WS=31, TEXT_WITH_PUNCUATION=32;
 	public static final int
 		RULE_document = 0, RULE_html = 1, RULE_tagStart = 2, RULE_tag = 3, RULE_noTagStart = 4, 
 		RULE_outOfTag = 5, RULE_outOfTagDirty = 6, RULE_outOfTagClean = 7, RULE_internalTag = 8, 
@@ -40,7 +40,7 @@ public class IRParser extends Parser {
 		return new String[] {
 			null, null, null, null, "'<!--'", null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, "'\"'", null, null, null, null, null, "' '"
+			null, null, "'\"'", null, null, null, null, null, "' '"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -49,9 +49,10 @@ public class IRParser extends Parser {
 			null, "TAG_START", "TAG_END", "TAG_START_OPEN", "COMMENT_START", "URL", 
 			"EMAIL", "FLOAT", "PUNCT", "INTEGER", "PLAIN_TEXT", "TEXT_WITH_PUNCTUATION", 
 			"NEW_LINE", "WS", "OTHER", "COMMENT_END", "COMMENT_CONTENT_SKIP", "TAG_START_CLOSE", 
-			"IN_TAG_URL", "CONTENT_START", "ATTRIBUTE_IGNORE", "FILLER", "TAG_WS", 
-			"AWS", "CONTENT_CLOSE", "CONTENT_FLOAT", "CONTENT_INTEGER", "CONTENT_EMAIL", 
-			"CONTENT_TEXT", "CONTENT_PUNCTUATION", "CONTENT_WS", "TEXT_WITH_PUNCUATION"
+			"IN_TAG_URL", "CONTENT_START_IGNORE", "CONTENT_START", "ATTRIBUTE_IGNORE", 
+			"FILLER", "TAG_WS", "AWS", "CONTENT_CLOSE", "CONTENT_FLOAT", "CONTENT_INTEGER", 
+			"CONTENT_EMAIL", "CONTENT_TEXT", "CONTENT_PUNCTUATION", "CONTENT_WS", 
+			"TEXT_WITH_PUNCUATION"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -148,7 +149,7 @@ public class IRParser extends Parser {
 				setState(27); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 2214598254L) != 0) );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 4429190766L) != 0) );
 			setState(29);
 			match(EOF);
 			}
@@ -538,7 +539,7 @@ public class IRParser extends Parser {
 					setState(70); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 2214594144L) != 0) );
+				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 4429186656L) != 0) );
 				setState(75);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,11,_ctx);
@@ -876,7 +877,7 @@ public class IRParser extends Parser {
 					setState(105); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 1543504384L) != 0) );
+				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 3087008256L) != 0) );
 				setState(107);
 				match(CONTENT_CLOSE);
 				}
@@ -1017,16 +1018,16 @@ public class IRParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001\u001fw\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
-		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
-		"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0002"+
-		"\b\u0007\b\u0002\t\u0007\t\u0002\n\u0007\n\u0002\u000b\u0007\u000b\u0001"+
-		"\u0000\u0004\u0000\u001a\b\u0000\u000b\u0000\f\u0000\u001b\u0001\u0000"+
-		"\u0001\u0000\u0001\u0001\u0001\u0001\u0003\u0001\"\b\u0001\u0001\u0001"+
-		"\u0004\u0001%\b\u0001\u000b\u0001\f\u0001&\u0001\u0002\u0004\u0002*\b"+
-		"\u0002\u000b\u0002\f\u0002+\u0001\u0002\u0001\u0002\u0004\u00020\b\u0002"+
-		"\u000b\u0002\f\u00021\u0001\u0002\u0001\u0002\u0005\u00026\b\u0002\n\u0002"+
-		"\f\u00029\t\u0002\u0003\u0002;\b\u0002\u0001\u0003\u0001\u0003\u0005\u0003"+
+		"\u0004\u0001 w\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002\u0002"+
+		"\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002\u0005"+
+		"\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0002\b\u0007"+
+		"\b\u0002\t\u0007\t\u0002\n\u0007\n\u0002\u000b\u0007\u000b\u0001\u0000"+
+		"\u0004\u0000\u001a\b\u0000\u000b\u0000\f\u0000\u001b\u0001\u0000\u0001"+
+		"\u0000\u0001\u0001\u0001\u0001\u0003\u0001\"\b\u0001\u0001\u0001\u0004"+
+		"\u0001%\b\u0001\u000b\u0001\f\u0001&\u0001\u0002\u0004\u0002*\b\u0002"+
+		"\u000b\u0002\f\u0002+\u0001\u0002\u0001\u0002\u0004\u00020\b\u0002\u000b"+
+		"\u0002\f\u00021\u0001\u0002\u0001\u0002\u0005\u00026\b\u0002\n\u0002\f"+
+		"\u00029\t\u0002\u0003\u0002;\b\u0002\u0001\u0003\u0001\u0003\u0005\u0003"+
 		"?\b\u0003\n\u0003\f\u0003B\t\u0003\u0001\u0004\u0004\u0004E\b\u0004\u000b"+
 		"\u0004\f\u0004F\u0001\u0004\u0005\u0004J\b\u0004\n\u0004\f\u0004M\t\u0004"+
 		"\u0001\u0004\u0004\u0004P\b\u0004\u000b\u0004\f\u0004Q\u0003\u0004T\b"+
@@ -1036,7 +1037,7 @@ public class IRParser extends Parser {
 		"\t\u0001\t\u0003\tn\b\t\u0001\n\u0001\n\u0001\n\u0003\ns\b\n\u0001\u000b"+
 		"\u0001\u000b\u0001\u000b\u000417@K\u0000\f\u0000\u0002\u0004\u0006\b\n"+
 		"\f\u000e\u0010\u0012\u0014\u0016\u0000\u0002\u0002\u0000\u0005\u0006\n"+
-		"\n\u0002\u0000\t\t\u001a\u001a\u0081\u0000\u0019\u0001\u0000\u0000\u0000"+
+		"\n\u0002\u0000\t\t\u001b\u001b\u0081\u0000\u0019\u0001\u0000\u0000\u0000"+
 		"\u0002!\u0001\u0000\u0000\u0000\u0004:\u0001\u0000\u0000\u0000\u0006@"+
 		"\u0001\u0000\u0000\u0000\bS\u0001\u0000\u0000\u0000\nX\u0001\u0000\u0000"+
 		"\u0000\fZ\u0001\u0000\u0000\u0000\u000e\\\u0001\u0000\u0000\u0000\u0010"+
@@ -1072,20 +1073,20 @@ public class IRParser extends Parser {
 		"\u0000\u0000SD\u0001\u0000\u0000\u0000SO\u0001\u0000\u0000\u0000T\t\u0001"+
 		"\u0000\u0000\u0000UY\u0003\u000e\u0007\u0000VY\u0003\f\u0006\u0000WY\u0003"+
 		"\u0016\u000b\u0000XU\u0001\u0000\u0000\u0000XV\u0001\u0000\u0000\u0000"+
-		"XW\u0001\u0000\u0000\u0000Y\u000b\u0001\u0000\u0000\u0000Z[\u0005\u001f"+
-		"\u0000\u0000[\r\u0001\u0000\u0000\u0000\\]\u0007\u0000\u0000\u0000]\u000f"+
-		"\u0001\u0000\u0000\u0000^`\u0005\u0003\u0000\u0000_a\u0003\u0012\t\u0000"+
-		"`_\u0001\u0000\u0000\u0000`a\u0001\u0000\u0000\u0000ab\u0001\u0000\u0000"+
-		"\u0000bc\u0005\u0011\u0000\u0000c\u0011\u0001\u0000\u0000\u0000dg\u0005"+
-		"\u0013\u0000\u0000eh\u0003\u0014\n\u0000fh\u0005\u001e\u0000\u0000ge\u0001"+
-		"\u0000\u0000\u0000gf\u0001\u0000\u0000\u0000hi\u0001\u0000\u0000\u0000"+
-		"ig\u0001\u0000\u0000\u0000ij\u0001\u0000\u0000\u0000jk\u0001\u0000\u0000"+
-		"\u0000kn\u0005\u0018\u0000\u0000ln\u0005\u0012\u0000\u0000md\u0001\u0000"+
-		"\u0000\u0000ml\u0001\u0000\u0000\u0000n\u0013\u0001\u0000\u0000\u0000"+
-		"os\u0005\u001c\u0000\u0000ps\u0003\u0016\u000b\u0000qs\u0005\u001b\u0000"+
-		"\u0000ro\u0001\u0000\u0000\u0000rp\u0001\u0000\u0000\u0000rq\u0001\u0000"+
-		"\u0000\u0000s\u0015\u0001\u0000\u0000\u0000tu\u0007\u0001\u0000\u0000"+
-		"u\u0017\u0001\u0000\u0000\u0000\u0014\u001b!&+157:>@FKQSX`gimr";
+		"XW\u0001\u0000\u0000\u0000Y\u000b\u0001\u0000\u0000\u0000Z[\u0005 \u0000"+
+		"\u0000[\r\u0001\u0000\u0000\u0000\\]\u0007\u0000\u0000\u0000]\u000f\u0001"+
+		"\u0000\u0000\u0000^`\u0005\u0003\u0000\u0000_a\u0003\u0012\t\u0000`_\u0001"+
+		"\u0000\u0000\u0000`a\u0001\u0000\u0000\u0000ab\u0001\u0000\u0000\u0000"+
+		"bc\u0005\u0011\u0000\u0000c\u0011\u0001\u0000\u0000\u0000dg\u0005\u0014"+
+		"\u0000\u0000eh\u0003\u0014\n\u0000fh\u0005\u001f\u0000\u0000ge\u0001\u0000"+
+		"\u0000\u0000gf\u0001\u0000\u0000\u0000hi\u0001\u0000\u0000\u0000ig\u0001"+
+		"\u0000\u0000\u0000ij\u0001\u0000\u0000\u0000jk\u0001\u0000\u0000\u0000"+
+		"kn\u0005\u0019\u0000\u0000ln\u0005\u0012\u0000\u0000md\u0001\u0000\u0000"+
+		"\u0000ml\u0001\u0000\u0000\u0000n\u0013\u0001\u0000\u0000\u0000os\u0005"+
+		"\u001d\u0000\u0000ps\u0003\u0016\u000b\u0000qs\u0005\u001c\u0000\u0000"+
+		"ro\u0001\u0000\u0000\u0000rp\u0001\u0000\u0000\u0000rq\u0001\u0000\u0000"+
+		"\u0000s\u0015\u0001\u0000\u0000\u0000tu\u0007\u0001\u0000\u0000u\u0017"+
+		"\u0001\u0000\u0000\u0000\u0014\u001b!&+157:>@FKQSX`gimr";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

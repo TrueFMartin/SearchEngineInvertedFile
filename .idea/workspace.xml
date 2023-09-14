@@ -4,7 +4,41 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8eac7903-1d8e-4d85-a7f4-c9bd47e8b102" name="Changes" comment="Merge linux changes" />
+    <list default="true" id="8eac7903-1d8e-4d85-a7f4-c9bd47e8b102" name="Changes" comment="Merge linux changes">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gen/com/truefmartin/IRLexer.interp" beforeDir="false" afterPath="$PROJECT_DIR$/gen/com/truefmartin/IRLexer.interp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gen/com/truefmartin/IRLexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/gen/com/truefmartin/IRLexer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/antlr4/com/truefmartin/IRLexer.g4" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/antlr4/com/truefmartin/IRLexer.g4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/HTMLParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/HTMLParser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRLexer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRLexer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$ContentOptionsContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$ContentOptionsContext.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$ContentTextContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$ContentTextContext.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$DocumentContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$DocumentContext.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$HandleIntegerContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$HandleIntegerContext.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$HtmlContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$HtmlContext.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$InternalTagContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$InternalTagContext.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$NoTagStartContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$NoTagStartContext.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$OutOfTagCleanContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$OutOfTagCleanContext.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$OutOfTagContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$OutOfTagContext.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$OutOfTagDirtyContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$OutOfTagDirtyContext.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$TagContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$TagContext.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$TagStartContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser$TagStartContext.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParserBaseListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParserBaseListener.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParserEvaluator.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParserEvaluator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParserListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/IRParserListener.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/antlr4/com/truefmartin/IRLexer.interp" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/antlr4/com/truefmartin/IRLexer.interp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/antlr4/com/truefmartin/IRLexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/antlr4/com/truefmartin/IRLexer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/antlr4/com/truefmartin/IRParser.interp" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/antlr4/com/truefmartin/IRParser.interp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/antlr4/com/truefmartin/IRParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/antlr4/com/truefmartin/IRParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/antlr4/com/truefmartin/IRParserBaseListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/antlr4/com/truefmartin/IRParserBaseListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/antlr4/com/truefmartin/IRParserListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/antlr4/com/truefmartin/IRParserListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/antlr4/dependencies.ser" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/antlr4/dependencies.ser" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testfiles/hard.html.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/testfiles/medium.html.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/testfiles/simple.html.txt" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -42,7 +76,8 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/truef/OneDrive - University of Arkansas/School/InfoRet/AntlrHW1 - Copy/991.html",
+    "last.edited.regexp": "eight=61 alt=\" In the Name of God }\"></cen",
+    "last_opened_file_path": "C:/Users/truef/OneDrive - University of Arkansas/School/InfoRet/AntlrHW1 - Copy/testfiles",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -62,6 +97,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\truef\OneDrive - University of Arkansas\School\InfoRet\AntlrHW1 - Copy\testfiles" />
       <recent name="C:\Users\truef\OneDrive - University of Arkansas\School\InfoRet\AntlrHW1" />
       <recent name="C:\Users\truef\OneDrive - University of Arkansas\School\InfoRet\AntlrHW1\src\main\antlr4" />
     </key>
@@ -112,7 +148,7 @@
       <updated>1694328369701</updated>
       <workItem from="1694328371106" duration="72019000" />
       <workItem from="1694574733645" duration="6815000" />
-      <workItem from="1694648652645" duration="1928000" />
+      <workItem from="1694648652645" duration="4790000" />
     </task>
     <task id="LOCAL-00001" summary="Merge linux changes">
       <created>1694587030635</created>
