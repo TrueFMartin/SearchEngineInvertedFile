@@ -16,9 +16,14 @@ import java.util.stream.Stream;
 
 public class HTMLParser {
     private static String outFileDir;
+    public static int LargestFileSize;
+
+    public static final int TERM_SIZE = 14;
+    public static final int FREQ_SIZE = 6;
     public static void main(String[] args) {
-        String inFileDir = args.length == 2 ? args[0]: "files";
-        outFileDir = args.length == 2 ? args[1]: "outfiles";
+        String inFileDir = args.length == 3 ? args[0]: "files";
+        outFileDir = args.length == 3 ? args[1]: "outfiles";
+        LargestFileSize = args.length == 3 ? Integer.parseInt(args[2]): 10000;
 
         // Get max number of processors as possible
         int numThreads = Runtime.getRuntime().availableProcessors();
@@ -44,6 +49,7 @@ public class HTMLParser {
             e.printStackTrace();
         } finally {
             executor.shutdown();
+            System.out.println("Total unique terms in corpus: " + IRParserEvaluator.getGlobalNumTokens());
         }
     }
 
@@ -58,7 +64,7 @@ public class HTMLParser {
         IRParser parser = new IRParser(tokens);
 
         // Create an instance of listener that handles exiting of rules
-        IRParserBaseListener customListener = new IRParserEvaluator(filePath, outFileDir, fileSize);
+        IRParserBaseListener customListener = new IRParserEvaluator(filePath, outFileDir, fileSize, LargestFileSize);
 
         parser.addParseListener(customListener);
 

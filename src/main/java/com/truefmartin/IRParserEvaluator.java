@@ -11,6 +11,11 @@ public class IRParserEvaluator extends IRParserBaseListener{
     private String outputFileName;
     private StringBuilder outputBuilder;
 
+    private volatile static long globalNumTokens;
+    private volatile long numUniqueTokens;
+    private long numTokens;
+    private HashTable hashTable;
+
     // UNUSED! but here for future use
     private static final Pattern PUNCTUATION =
             Pattern.compile("[,-_./=:;<>?@\\[\\]{|}~!\"#$^`%&'()*+]");
@@ -18,7 +23,7 @@ public class IRParserEvaluator extends IRParserBaseListener{
             Pattern.compile("[a-z]+?=\"\\{?");
 
 
-    public IRParserEvaluator(String inputFileName, String outFileDir, long initBufferSize) {
+    public IRParserEvaluator(String inputFileName, String outFileDir, long initBufferSize, int hashSize) {
         // Get inputFileName to be in form of "/fileName"
         if (inputFileName.lastIndexOf('/') == -1) {
             inputFileName = '/' + inputFileName;
@@ -31,13 +36,22 @@ public class IRParserEvaluator extends IRParserBaseListener{
         // End with an output of the form "outfile/someFile.html"
         this.outputFileName = outFileDir + inputFileName;
         outputBuilder = new StringBuilder((int) initBufferSize);
+
+        hashTable = new HashTable(hashSize);
+    }
+
+    public static long getGlobalNumTokens() {
+        return globalNumTokens;
     }
 
     // Called by every listener that has content to output,
     // Adds a new line and sets to lower case
-    private void print(String s) {
-        outputBuilder.append(s.toLowerCase()).append("\n");
+    private void toHashTable(String s) {
+        hashTable.insert(s.toLowerCase(), 1);
+        numTokens++;
     }
+
+
 
     // Remove ' content=" ' or ' alt=" ' from s
     private String contentStartRemove(String s) {
@@ -58,11 +72,13 @@ public class IRParserEvaluator extends IRParserBaseListener{
         return PUNCTUATION.matcher(s).replaceAll("");
     }
 
-    private void write() throws FileNotFoundException {
-//        System.out.println("Writing to " + Path.of(outputFileDirectory + "/" + outputFileName).toAbsolutePath());
-        byte[] buffer = outputBuilder.toString().getBytes();
+    private void finish() throws FileNotFoundException {
+        numUniqueTokens = hashTable.getNumUniqueTerms();
+        System.out.println("In " + outputFileName + "--\tTotal tokens: " + numTokens + "\tUnique tokens: " + numUniqueTokens );
+
+        byte[] buffer = hashTable.print().toString().getBytes();
         try {
-            FileChannel rwChannel = new RandomAccessFile(outputFileName, "rw").getChannel();
+            FileChannel rwChannel = new RandomAccessFile("ht_" + outputFileName, "rw").getChannel();
             ByteBuffer wrBuf = rwChannel.map(FileChannel.MapMode.READ_WRITE, 0, buffer.length);
             wrBuf.put(buffer);
             rwChannel.close();
@@ -76,7 +92,7 @@ public class IRParserEvaluator extends IRParserBaseListener{
     public void exitDocument(IRParser.DocumentContext ctx) {
         System.out.println("Exiting Document");
         try {
-            this.write();
+            this.finish();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -85,7 +101,7 @@ public class IRParserEvaluator extends IRParserBaseListener{
     // Clean text that needs no modification
     @Override
     public void exitOutOfTagClean(IRParser.OutOfTagCleanContext ctx) {
-        print(ctx.getText());
+        toHashTable(ctx.getText());
     }
 
     // The text that is in the content part of: <IMG content="XXX somethingElse", or <IMG alt="XXX somethingElse"
@@ -93,10 +109,10 @@ public class IRParserEvaluator extends IRParserBaseListener{
     @Override
     public void exitContentText(IRParser.ContentTextContext ctx) {
         if (ctx.IN_TAG_URL() != null) {
-            print(contentEndRemove(contentStartRemove(ctx.IN_TAG_URL().toString())));
+            toHashTable(contentEndRemove(contentStartRemove(ctx.IN_TAG_URL().toString())));
             // If it's a URL, it won't have a 'CONTENT_START' and 'CONTENT_END'
         } else {
-            print(contentStartRemove(ctx.CONTENT_START().toString()));
+            toHashTable(contentStartRemove(ctx.CONTENT_START().toString()));
         }
     }
 
@@ -104,16 +120,28 @@ public class IRParserEvaluator extends IRParserBaseListener{
     @Override
     public void exitContentOptions(IRParser.ContentOptionsContext ctx) {
         if (ctx.CONTENT_TEXT() != null) {
-            print(ctx.CONTENT_TEXT().toString());
+            toHashTable(ctx.CONTENT_TEXT().toString());
         }
         if (ctx.CONTENT_EMAIL() != null) {
-            print(ctx.CONTENT_EMAIL().toString());
+            toHashTable(ctx.CONTENT_EMAIL().toString());
         }
     }
 
     // Remove commas from integers
     @Override
     public void exitHandleInteger(IRParser.HandleIntegerContext ctx) {
-        print(ctx.getText().replace(",", ""));
+        toHashTable(ctx.getText().replace(",", ""));
+    }
+
+    public long getNumTokens() {
+        return numTokens;
+    }
+
+    public HashTable getHashTable() {
+        return hashTable;
+    }
+
+    public long getNumUnique() {
+        return numUniqueTokens;
     }
 }
