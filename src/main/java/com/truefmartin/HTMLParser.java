@@ -60,8 +60,8 @@ public class HTMLParser {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
         lexer.removeErrorListeners();
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
         IRParser parser = new IRParser(tokens);
 
         // Create an instance of listener that handles exiting of rules

@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8eac7903-1d8e-4d85-a7f4-c9bd47e8b102" name="Changes" comment="Merge linux changes">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/outfiles/.test.text.swp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/truefmartin/HTMLParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/truefmartin/HTMLParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/truefmartin/IRParserEvaluator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/truefmartin/IRParserEvaluator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/truefmartin/HTMLParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/truefmartin/HTMLParser.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/hw3-1-spring-boot.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/hw3-1-spring-boot.jar" afterDir="false" />
-    </list>
+    <list default="true" id="8eac7903-1d8e-4d85-a7f4-c9bd47e8b102" name="Changes" comment="Merge linux changes" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -126,7 +119,7 @@
       <workItem from="1695223084093" duration="807000" />
       <workItem from="1695536377699" duration="599000" />
       <workItem from="1695538683069" duration="760000" />
-      <workItem from="1696384780558" duration="8130000" />
+      <workItem from="1696384780558" duration="8814000" />
     </task>
     <task id="LOCAL-00001" summary="Merge linux changes">
       <created>1694587030635</created>
