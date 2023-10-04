@@ -3,6 +3,8 @@ package com.truefmartin;
 /**
  * Filename: HashTabe.java
  * Author: Susan Gauch, converted to java by Matt Miller, debugged by Patrick Anderson.
+ *
+ * Modified by: Franklin True Martin for use in inversion algorithm.
  */
 
 import java.io.IOException;
@@ -72,7 +74,7 @@ public class HashTable
     }
 
     /**
-     * Prints the non empty contents of the hashtable to the file given.
+     * Prints the contents of the hashtable to the file given.
      *
      * @param filename String
      * @return
@@ -114,7 +116,7 @@ public class HashTable
     }
 
     /**
-     * Insert string addr, and string name into hashtable, hashes on addr.
+     * Insert string term, and int freq into hashtable, hashes on term.
      * @param term String to be hashed.
      * @param freq String
      */

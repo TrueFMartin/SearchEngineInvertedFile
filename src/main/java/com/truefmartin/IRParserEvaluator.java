@@ -11,6 +11,7 @@ public class IRParserEvaluator extends IRParserBaseListener{
     private String outputFileName;
     private StringBuilder outputBuilder;
 
+    private volatile static long globalNumTokensUnique;
     private volatile static long globalNumTokens;
     private volatile long numUniqueTokens;
     private long numTokens;
@@ -38,10 +39,6 @@ public class IRParserEvaluator extends IRParserBaseListener{
         outputBuilder = new StringBuilder((int) initBufferSize);
 
         hashTable = new HashTable(hashSize);
-    }
-
-    public static long getGlobalNumTokens() {
-        return globalNumTokens;
     }
 
     // Called by every listener that has content to output,
@@ -85,7 +82,8 @@ public class IRParserEvaluator extends IRParserBaseListener{
         } catch (Exception e){
             throw new RuntimeException(e);
         }
-        globalNumTokens += numUniqueTokens;
+        globalNumTokensUnique += numUniqueTokens;
+        globalNumTokens += numTokens;
     }
 
     // At end of document, write everything to output file
@@ -137,7 +135,13 @@ public class IRParserEvaluator extends IRParserBaseListener{
     public long getNumTokens() {
         return numTokens;
     }
+    public static long getGlobalNumTokens() {
+        return globalNumTokens;
+    }
 
+    public static long getGlobalNumTokensUnique() {
+        return globalNumTokensUnique;
+    }
     public HashTable getHashTable() {
         return hashTable;
     }

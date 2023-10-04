@@ -49,7 +49,8 @@ public class HTMLParser {
             e.printStackTrace();
         } finally {
             executor.shutdown();
-            System.out.println("Total unique terms in corpus: " + IRParserEvaluator.getGlobalNumTokens());
+            System.out.println("Total unique terms / all terms in corpus: " + IRParserEvaluator.getGlobalNumTokensUnique()
+            + " / " + IRParserEvaluator.getGlobalNumTokens());
         }
     }
 
