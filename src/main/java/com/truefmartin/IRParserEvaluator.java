@@ -78,13 +78,14 @@ public class IRParserEvaluator extends IRParserBaseListener{
 
         byte[] buffer = hashTable.print().toString().getBytes();
         try {
-            FileChannel rwChannel = new RandomAccessFile("ht_" + outputFileName, "rw").getChannel();
+            FileChannel rwChannel = new RandomAccessFile(outputFileName, "rw").getChannel();
             ByteBuffer wrBuf = rwChannel.map(FileChannel.MapMode.READ_WRITE, 0, buffer.length);
             wrBuf.put(buffer);
             rwChannel.close();
         } catch (Exception e){
             throw new RuntimeException(e);
         }
+        globalNumTokens += numUniqueTokens;
     }
 
     // At end of document, write everything to output file
