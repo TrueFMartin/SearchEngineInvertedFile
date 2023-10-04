@@ -63,7 +63,7 @@ public class HTMLParser {
         lexer.removeErrorListeners();
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         IRParser parser = new IRParser(tokens);
-
+        parser.removeErrorListeners();
         // Create an instance of listener that handles exiting of rules
         IRParserBaseListener customListener = new IRParserEvaluator(filePath, outFileDir, fileSize, LargestFileSize);
 
