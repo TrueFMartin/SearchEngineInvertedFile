@@ -7,8 +7,13 @@ package com.truefmartin;
  * Modified by: Franklin True Martin for use in inversion algorithm.
  */
 
-import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+/**
+ * The type Hash table.
+ */
 public class HashTable
 {
     private int size;
@@ -17,22 +22,27 @@ public class HashTable
     private long lookups;
     private Node[] hashtable;
 
+    private boolean hasFailed;
+
     private final static int TERM_SIZE = HTMLParser.TERM_SIZE;
     private final static int FREQ_SIZE = HTMLParser.FREQ_SIZE;
 
     /**
      * Initializes a hashtable with size 3 times the size given.
+     *
      * @param size One third of the hashtable size;
      */
     public HashTable(int size)
     {
         this.size=size*3;
+        hasFailed = false;
         init();
     }
 
     /**
      * Copies a hashtable
-     * @param ht
+     *
+     * @param ht the ht
      */
     public HashTable(HashTable ht)
     {
@@ -63,6 +73,11 @@ public class HashTable
             hashtable[i]=new Node("empty",-1);
     }
 
+    /**
+     * Gets num unique terms.
+     *
+     * @return the num unique terms
+     */
     public int getNumUniqueTerms() {
         int numUnique = 0;
         for (Node node: hashtable) {
@@ -76,8 +91,7 @@ public class HashTable
     /**
      * Prints the contents of the hashtable to the file given.
      *
-     * @param filename String
-     * @return
+     * @return StringBuilder of hash table with empty fields
      */
     public StringBuilder print()
     {
@@ -115,8 +129,22 @@ public class HashTable
 //        System.out.println("Collisions: "+collision+" Used: "+used+" Lookups: "+lookups);
     }
 
+
+    /**
+     * Sort and remove all empty buckets.
+     *
+     * @return the string builder
+     */
+    public StringBuilder printSorted()
+    {
+        StringBuilder out = new StringBuilder(size*20);
+        Arrays.stream(this.hashtable).filter(node -> node.getFreq() != -1).sorted().forEachOrdered(out::append);
+        return out;
+    }
+
     /**
      * Insert string term, and int freq into hashtable, hashes on term.
+     *
      * @param term String to be hashed.
      * @param freq String
      */
@@ -155,7 +183,7 @@ public class HashTable
 
         index= sum%size;
         int index2 = (int) index;
-
+        boolean onSecondLoop = false;
         /*
          * check to see if the word is in that location
          * if not there, do linear probing until word is found\
@@ -165,8 +193,14 @@ public class HashTable
         {
             index2++;
             collision++;
-            if(index2 >= size)
+            if(index2 >= size) {
                 index2 = 0;
+                if(onSecondLoop) {
+                    hasFailed = true;
+                    break;
+                }
+                onSecondLoop = true;
+            }
         }
 
         return index2;
@@ -174,6 +208,7 @@ public class HashTable
 
     /**
      * Returns the freq at the hashed location of term.
+     *
      * @param term String to be hashed.
      * @return freq in the table at the location of term.
      */
@@ -186,6 +221,7 @@ public class HashTable
 
     /**
      * Get the three statistics as a string.  Used, Collisions, and Lookups.
+     *
      * @return Used, Collisions, and Lookups as a string.
      */
     public String getUsage()
@@ -195,6 +231,7 @@ public class HashTable
 
     /**
      * Get the amount in the table.
+     *
      * @return How full the table is. long
      */
     public long getUsed()
@@ -204,6 +241,7 @@ public class HashTable
 
     /**
      * Get the number of collisions.
+     *
      * @return How much you need to improve your hash function. long
      */
     public long getCollisions()
@@ -213,7 +251,8 @@ public class HashTable
 
     /**
      * The number of lookups made.
-     * @return long
+     *
+     * @return long lookups
      */
     public long getLookups()
     {
@@ -222,6 +261,7 @@ public class HashTable
 
     /**
      * Gets the size of the array.
+     *
      * @return size, long
      */
     public int getSize()
@@ -239,40 +279,87 @@ public class HashTable
         return hashtable[index];
     }
 
+    /**
+     * Has failed boolean.
+     *
+     * @return the boolean
+     */
+    public boolean hasFailed() {
+        return hasFailed;
+    }
+
 
     /**
      * Private class node to whole the actual data stored in the hashtable.
      * Provides standard accessor and mutator methods.
      */
-    private class Node
+    private class Node implements Comparable<Node>
     {
         private String term;
         private int freq;
 
+        /**
+         * Instantiates a new Node.
+         *
+         * @param term the term
+         * @param freq the freq
+         */
         public Node(String term, int freq)
         {
             this.term = term;
             this.freq = freq;
         }
 
+        /**
+         * Gets term.
+         *
+         * @return the term
+         */
         public String getTerm()
         {
             return term;
         }
 
+        /**
+         * Gets freq.
+         *
+         * @return the freq
+         */
         public int getFreq()
         {
             return freq;
         }
 
+        /**
+         * Sets term.
+         *
+         * @param term the term
+         */
         public void setTerm(String term)
         {
             this.term = term;
         }
 
+        /**
+         * Sets freq.
+         *
+         * @param freq the freq
+         */
         public void setFreq(int freq)
         {
             this.freq = freq;
+        }
+
+        @Override
+        public String toString() {
+            return this.term + " " + this.freq + "\n";
+        }
+
+        @Override
+        public int compareTo(Node node) {
+            if (this.freq == -1 && node.freq == -1)
+                return 0;
+            return this.freq == -1 ? 1: this.term.compareTo(node.term);
         }
     }
 }

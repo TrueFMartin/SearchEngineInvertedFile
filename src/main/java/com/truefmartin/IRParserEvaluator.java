@@ -5,17 +5,17 @@ import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
 public class IRParserEvaluator extends IRParserBaseListener{
+    private final HTMLParser.TokenCounter tokenCounter;
     private String outputFileName;
-    private StringBuilder outputBuilder;
-
-    private volatile static long globalNumTokensUnique;
-    private volatile static long globalNumTokens;
-    private volatile long numUniqueTokens;
-    private long numTokens;
+    private int numUniqueTokens;
+    private int numTokens;
     private HashTable hashTable;
+
+    private volatile static boolean failedFromHash;
 
     // UNUSED! but here for future use
     private static final Pattern PUNCTUATION =
@@ -24,7 +24,8 @@ public class IRParserEvaluator extends IRParserBaseListener{
             Pattern.compile("[a-z]+?=\"\\{?");
 
 
-    public IRParserEvaluator(String inputFileName, String outFileDir, long initBufferSize, int hashSize) {
+    public IRParserEvaluator(String inputFileName, String outFileDir, long initBufferSize, int hashSize, HTMLParser.TokenCounter tokenCounter) {
+        this.tokenCounter = tokenCounter;
         // Get inputFileName to be in form of "/fileName"
         if (inputFileName.lastIndexOf('/') == -1) {
             inputFileName = '/' + inputFileName;
@@ -36,10 +37,9 @@ public class IRParserEvaluator extends IRParserBaseListener{
             outFileDir =  outFileDir.substring(0, outFileDir.length()-1);
         // End with an output of the form "outfile/someFile.html"
         this.outputFileName = outFileDir + inputFileName;
-        outputBuilder = new StringBuilder((int) initBufferSize);
-
         hashTable = new HashTable(hashSize);
     }
+
 
     // Called by every listener that has content to output,
     // Adds a new line and sets to lower case
@@ -71,9 +71,12 @@ public class IRParserEvaluator extends IRParserBaseListener{
 
     private void finish() throws FileNotFoundException {
         numUniqueTokens = hashTable.getNumUniqueTerms();
+        if (hashTable.hasFailed()) {
+            failedFromHash = true;
+            return;
+        }
         System.out.println("In " + outputFileName + "--\tTotal tokens: " + numTokens + "\tUnique tokens: " + numUniqueTokens );
-
-        byte[] buffer = hashTable.print().toString().getBytes();
+        byte[] buffer = hashTable.printSorted().toString().getBytes();
         try {
             FileChannel rwChannel = new RandomAccessFile(outputFileName, "rw").getChannel();
             ByteBuffer wrBuf = rwChannel.map(FileChannel.MapMode.READ_WRITE, 0, buffer.length);
@@ -82,14 +85,13 @@ public class IRParserEvaluator extends IRParserBaseListener{
         } catch (Exception e){
             throw new RuntimeException(e);
         }
-        globalNumTokensUnique += numUniqueTokens;
-        globalNumTokens += numTokens;
+        this.tokenCounter.increaseNumTokens(numTokens);
+        this.tokenCounter.increaseNumUniqueTokens(numUniqueTokens);
     }
 
     // At end of document, write everything to output file
     @Override
     public void exitDocument(IRParser.DocumentContext ctx) {
-        System.out.println("Exiting Document");
         try {
             this.finish();
         } catch (FileNotFoundException e) {
@@ -135,18 +137,16 @@ public class IRParserEvaluator extends IRParserBaseListener{
     public long getNumTokens() {
         return numTokens;
     }
-    public static long getGlobalNumTokens() {
-        return globalNumTokens;
-    }
 
-    public static long getGlobalNumTokensUnique() {
-        return globalNumTokensUnique;
-    }
     public HashTable getHashTable() {
         return hashTable;
     }
 
     public long getNumUnique() {
         return numUniqueTokens;
+    }
+
+    public static boolean isFailedFromHash() {
+        return failedFromHash;
     }
 }

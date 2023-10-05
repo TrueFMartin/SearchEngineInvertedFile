@@ -1,5 +1,6 @@
 parser grammar IRParser;
 
+
 options {
     tokenVocab = IRLexer;
 }
