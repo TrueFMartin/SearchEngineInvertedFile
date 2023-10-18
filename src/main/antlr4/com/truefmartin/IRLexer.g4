@@ -2,6 +2,8 @@ lexer grammar IRLexer;
 
 
 // Tag open and close
+JS: '<script>' -> skip, mode(JavaScript);
+JS_TYPE: '<script type="' [ A-Za-z0-9/\-+]+? '">' -> skip, mode(JavaScript);
 TAG_START: '<'  [A-Za-z0-9]+? '>' ;
 TAG_END: '</'  [A-Za-z0-9]+ '>' ;
 TAG_END_EXLAM: '<' '!' [A-Za-z0-9]+ -> skip, mode(EXLAM) ;
@@ -23,6 +25,10 @@ NEW_LINE: ('/r'? '\n') ;
 //NEWLINE_NEWLINE: NEW_LINE NEW_LINE+ -> skip;
 WS: (' '|'\t')+ -> skip;
 OTHER: .+? -> skip;
+
+mode JavaScript;
+JS_END: '</script>' -> skip, mode(DEFAULT_MODE);
+OTHER_JS: .+? -> skip;
 
 mode EXLAM;
 EXLAM_END: '>' -> skip, mode(DEFAULT_MODE);
