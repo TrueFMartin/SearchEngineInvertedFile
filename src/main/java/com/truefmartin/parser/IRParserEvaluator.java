@@ -1,19 +1,21 @@
-package com.truefmartin;
+package com.truefmartin.parser;
 
+
+import com.truefmartin.IRParser;
+import com.truefmartin.IRParserBaseListener;
 
 import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
-public class IRParserEvaluator extends IRParserBaseListener{
-    private final HTMLParser.TokenCounter tokenCounter;
+public class IRParserEvaluator extends IRParserBaseListener {
+    private final HTMLParser.SynchronizedCounter synchronizedCounter;
     private String outputFileName;
     private int numUniqueTokens;
     private int numTokens;
-    private HashTable hashTable;
+    private DocumentHashTable hashTable;
 
     private volatile static boolean failedFromHash;
 
@@ -24,8 +26,8 @@ public class IRParserEvaluator extends IRParserBaseListener{
             Pattern.compile("[a-z]+?=\"\\{?");
 
 
-    public IRParserEvaluator(String inputFileName, String outFileDir, long initBufferSize, int hashSize, HTMLParser.TokenCounter tokenCounter) {
-        this.tokenCounter = tokenCounter;
+    public IRParserEvaluator(String inputFileName, String outFileDir, int hashSize, HTMLParser.SynchronizedCounter synchronizedCounter) {
+        this.synchronizedCounter = synchronizedCounter;
         // Get inputFileName to be in form of "/fileName"
         if (inputFileName.lastIndexOf('/') == -1) {
             inputFileName = '/' + inputFileName;
@@ -37,7 +39,7 @@ public class IRParserEvaluator extends IRParserBaseListener{
             outFileDir =  outFileDir.substring(0, outFileDir.length()-1);
         // End with an output of the form "outfile/someFile.html"
         this.outputFileName = outFileDir + inputFileName;
-        hashTable = new HashTable(hashSize);
+        hashTable = new DocumentHashTable(hashSize);
     }
 
 
@@ -85,8 +87,8 @@ public class IRParserEvaluator extends IRParserBaseListener{
         } catch (Exception e){
             throw new RuntimeException(e);
         }
-        this.tokenCounter.increaseNumTokens(numTokens);
-        this.tokenCounter.increaseNumUniqueTokens(numUniqueTokens);
+        this.synchronizedCounter.increaseNumTokens(numTokens);
+        this.synchronizedCounter.increaseNumUniqueTokens(numUniqueTokens);
     }
 
     // At end of document, write everything to output file
@@ -138,7 +140,7 @@ public class IRParserEvaluator extends IRParserBaseListener{
         return numTokens;
     }
 
-    public HashTable getHashTable() {
+    public DocumentHashTable getHashTable() {
         return hashTable;
     }
 

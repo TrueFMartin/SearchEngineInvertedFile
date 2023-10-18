@@ -12,24 +12,26 @@ document
 
 // Each line inside of the .html file is an 'html'
 html
-    : (tagStart | noTagStart)? NEW_LINE+
+    : tagStart NEW_LINE+
+    | noTagStart NEW_LINE+
+    | NEW_LINE+
     ;
 
 // A line that starts with either <tag> or <tag 
 tagStart
-    : TAG_START+ tag
-    | internalTag+? (outOfTag | TAG_END)*?
+    : TAG_START+? internalTag*?  (outOfTag | TAG_END)*?
+    | internalTag+? TAG_START*? (outOfTag | TAG_END)*?
     ;
 
 // A line that starts with <tag> (closed html tag), we ignore TAG_START,
 // and begin to care with outOfTag 
-tag
-    : (outOfTag | TAG_END)*?
-    ;
+//tag
+//    : (outOfTag | TAG_END)*?
+//    ;
 
 // A line that does not start with <tag> or <tag
 noTagStart
-    : outOfTag+ TAG_END*?
+    : outOfTag (outOfTag | TAG_START | TAG_END)+
     | TAG_END+
     ;
 

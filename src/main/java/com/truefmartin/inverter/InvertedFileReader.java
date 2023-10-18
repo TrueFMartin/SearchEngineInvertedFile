@@ -1,8 +1,9 @@
 package com.truefmartin.inverter;
 
-import structs.DictData;
-import structs.MapData;
-import structs.PostData;
+
+import com.truefmartin.inverter.structs.DictData;
+import com.truefmartin.inverter.structs.MapData;
+import com.truefmartin.inverter.structs.PostData;
 
 public class InvertedFileReader {
     static String FILENAME_MAP = "map.txt";

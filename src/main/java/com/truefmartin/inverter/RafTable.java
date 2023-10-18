@@ -1,6 +1,7 @@
 package com.truefmartin.inverter;
 
-import structs.Writeable;
+
+import com.truefmartin.inverter.structs.Writeable;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

@@ -1,9 +1,8 @@
 package com.truefmartin.inverter;
 
-import structs.DictData;
-import structs.MapData;
-import structs.PostData;
-
+import com.truefmartin.inverter.structs.DictData;
+import com.truefmartin.inverter.structs.MapData;
+import com.truefmartin.inverter.structs.PostData;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

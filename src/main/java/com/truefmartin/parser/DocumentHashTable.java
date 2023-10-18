@@ -1,20 +1,18 @@
-package com.truefmartin;
+package com.truefmartin.parser;
 
 /**
- * Filename: HashTabe.java
+ * Filename: DocumentHashTabe.java
  * Author: Susan Gauch, converted to java by Matt Miller, debugged by Patrick Anderson.
  *
  * Modified by: Franklin True Martin for use in inversion algorithm.
  */
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * The type Hash table.
  */
-public class HashTable
+public class DocumentHashTable
 {
     private int size;
     private long used;
@@ -32,7 +30,7 @@ public class HashTable
      *
      * @param size One third of the hashtable size;
      */
-    public HashTable(int size)
+    public DocumentHashTable(int size)
     {
         this.size=size*3;
         hasFailed = false;
@@ -44,7 +42,7 @@ public class HashTable
      *
      * @param ht the ht
      */
-    public HashTable(HashTable ht)
+    public DocumentHashTable(DocumentHashTable ht)
     {
         this.size=ht.getSize();
         used=ht.getUsed();
