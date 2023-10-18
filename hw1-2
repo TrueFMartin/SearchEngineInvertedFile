@@ -16,6 +16,6 @@ mkdir $2 2>/dev/null
 
 doc_hash_table_size=100
 
-time (java -jar target/hw3-1-spring-boot.jar $1 $2 doc_hash_table_size &> /dev/null)
+time (java -jar target/hw3-1-spring-boot.jar $1 $2 $doc_hash_table_size)
 
 echo "Complete, output is in: $2" 
