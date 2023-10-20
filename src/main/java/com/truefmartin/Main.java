@@ -8,29 +8,36 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
-        String inFileDir = args.length == 3 ? args[0] : "files";
-        String outFileDir = args.length == 3 ? args[1] : "outfiles";
+        String inFileDir = args.length >= 1 ? args[0] : "files";
+        String outFileDir = args.length >= 2 ? args[1] : "outfiles";
         // Size in bytes of file with most unique words
-        int largestFileSize = args.length == 3 ? Integer.parseInt(args[2]) : 39564;
+        int largestFileSize = args.length >= 3 ? Integer.parseInt(args[2]) : 39564;
         // Number of unique words in that file
-        int largestFileNumUnique = args.length == 3 ? Integer.parseInt(args[2]) : 5795;
+        int largestFileNumUnique = args.length >= 4 ? Integer.parseInt(args[2]) : 5795;
 
         HTMLParser htmlParser = new HTMLParser(inFileDir, outFileDir, largestFileSize, largestFileNumUnique);
-        htmlParser.begin();
-
-        int uniqueWordsCount = countUniqueWords(outFileDir);
-        System.out.println("Number of unique words for entire directory: " + uniqueWordsCount);
-        new Inverter(uniqueWordsCount, fileNames);
+        Set<String> fileNames = htmlParser.begin();
+        // After sorted files are outputted, count the total number of unique words in the directory
+        Set<String> uniqueWords = countUniqueWords(outFileDir);
+        System.out.println("Number of unique words for entire directory: " + uniqueWords.size());
+        Inverter inverter = new Inverter(uniqueWords.size(), fileNames, outFileDir + "/");
+        fileNames = null;
+        List<String> uniqueWordsSorted = uniqueWords.stream().sorted().collect(Collectors.toList());
+        uniqueWords = null;
+        inverter.fillGlobalHash(uniqueWordsSorted);
+        uniqueWordsSorted = null;
 
 
 
     }
     // Count the number of unique words in the output directory, only reads first space separated column
-    private static int countUniqueWords(String directoryPath) {
+    private static Set<String> countUniqueWords(String directoryPath) {
         Set<String> uniqueWords = new HashSet<>();
 
         File directory = new File(directoryPath);
@@ -54,6 +61,6 @@ public class Main {
             }
         }
 
-        return uniqueWords.size();
+        return uniqueWords;
     }
 }

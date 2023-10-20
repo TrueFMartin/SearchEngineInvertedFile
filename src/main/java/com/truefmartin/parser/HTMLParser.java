@@ -65,7 +65,6 @@ public class HTMLParser {
             System.out.println("Number of total tokens in corpus: " + synchronizedCounter.getNumTokens());
             System.out.println("Number of unique terms per document summed: " + synchronizedCounter.getNumTokensUnique());
 
-            // After sorted files are outputted, count the total number of unique words in the directory
             return htmlFiles.keySet();
         }
     }

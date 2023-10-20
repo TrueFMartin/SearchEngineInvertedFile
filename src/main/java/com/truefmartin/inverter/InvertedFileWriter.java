@@ -6,6 +6,8 @@ import com.truefmartin.inverter.structs.PostData;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The type Inverted file writer.
@@ -65,6 +67,11 @@ public class InvertedFileWriter {
     private RafTable rafDict;
     private RafTable rafPost;
 
+    public enum FileType {
+        MAP, DICT, POST
+    }
+
+    private final Map<FileType, Boolean> fileTypeMap = new HashMap<>(3);
 
     /**
      * Instantiates a new Inverted file writer with the default settings.
@@ -85,6 +92,59 @@ public class InvertedFileWriter {
                 .addColumn(DEFAULT_NUM_DOCS_SIZE)
                 .addColumn(DEFAULT_START_SIZE)
                 .build();
+        setFileTypeMap(FileType.MAP, FileType.DICT, FileType.POST);
+    }
+
+    /**
+     * Instantiates a new Inverted file writer with the default settings.
+     */
+    public InvertedFileWriter(FileType... fileTypes) {
+        for(FileType fileType: fileTypes) {
+            switch (fileType) {
+                case MAP:
+                    rafMap = new RafTable.Builder<MapData>(FILENAME_MAP,FILENAME_CONFIG_MAP, RafTable.RafStatus.WRITE, 2)
+                            .addColumn(DEFAULT_DOC_ID_SIZE)
+                            .addColumn(DEFAULT_FILE_NAME_SIZE)
+                            .build();
+                    try {
+                        Files.deleteIfExists(Path.of(FILENAME_MAP));
+                        Files.deleteIfExists(Path.of(FILENAME_CONFIG_MAP));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    rafMap.setWriteModeNew();
+
+                    break;
+                case DICT:
+                    rafDict = new RafTable.Builder<DictData>(FILENAME_DICT, FILENAME_CONFIG_DICT, RafTable.RafStatus.WRITE, 3)
+                            .addColumn(DEFAULT_TOKEN_SIZE)
+                            .addColumn(DEFAULT_NUM_DOCS_SIZE)
+                            .addColumn(DEFAULT_START_SIZE)
+                            .build();
+                    try {
+                        Files.deleteIfExists(Path.of(FILENAME_DICT));
+                        Files.deleteIfExists(Path.of(FILENAME_CONFIG_DICT));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    rafDict.setWriteModeNew();
+                    break;
+                case POST:
+                    rafPost = new RafTable.Builder<PostData>(FILENAME_POST, FILENAME_CONFIG_POST, RafTable.RafStatus.WRITE, 2)
+                            .addColumn(DEFAULT_DOC_ID_SIZE)
+                            .addColumn(DEFAULT_FREQ_SIZE)
+                            .build();
+                    try {
+                        Files.deleteIfExists(Path.of(FILENAME_POST));
+                        Files.deleteIfExists(Path.of(FILENAME_CONFIG_POST));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    rafPost.setWriteModeNew();
+                    break;
+            }
+        }
+        setFileTypeMap(fileTypes);
     }
 
     /**
@@ -115,9 +175,11 @@ public class InvertedFileWriter {
                     .addColumn(DEFAULT_START_SIZE)
                     .build();
         }
+        setFileTypeMap(FileType.MAP, FileType.DICT, FileType.POST);
+
     }
     /**
-     * Open for write, overwriting the current files.
+     * Open for write, overwriting the current files. Used with default constructor.
      */
     public void openForWriteNew() {
         try {
@@ -139,12 +201,18 @@ public class InvertedFileWriter {
      * Close after writing, writes config files when finished.
      */
     public void closeAfterWriting() {
-        rafMap.writeConfigs();
-        rafPost.writeConfigs();
-        rafDict.writeConfigs();
-        rafMap.closeFile();
-        rafPost.closeFile();
-        rafDict.closeFile();
+        if(fileTypeMap.get(FileType.MAP)) {
+            rafMap.writeConfigs();
+            rafMap.closeFile();
+        }
+        if(fileTypeMap.get(FileType.POST)) {
+            rafPost.writeConfigs();
+            rafPost.closeFile();
+        }
+        if(fileTypeMap.get(FileType.DICT)) {
+            rafDict.writeConfigs();
+            rafDict.closeFile();
+        }
     }
 
     /**
@@ -154,7 +222,9 @@ public class InvertedFileWriter {
      * @param fileName the file name
      */
     public void writeMapRecord(int docID, String fileName) {
-        rafMap.write(new MapData(Integer.toString(docID), fileName));
+        if(fileTypeMap.get(FileType.MAP)) {
+            rafMap.write(new MapData(Integer.toString(docID), fileName));
+        } else throw new UnsupportedOperationException("Map not initialized");
     }
 
     /**
@@ -164,7 +234,9 @@ public class InvertedFileWriter {
      * @param weight the weight
      */
     public void writePostRecord(int docID, int weight) {
-        rafPost.write(new PostData(Integer.toString(docID), Integer.toString(weight)));
+        if(fileTypeMap.get(FileType.POST)) {
+            rafPost.write(new PostData(Integer.toString(docID), Integer.toString(weight)));
+        } else throw new UnsupportedOperationException("Post not initialized");
     }
 
     /**
@@ -176,7 +248,9 @@ public class InvertedFileWriter {
      * @param start   the start
      */
     public void writeDictRecordHashed(int row, String term, int numDocs, int start) {
-        rafDict.write(new DictData(term, Integer.toString(numDocs), Integer.toString(start)), row);
+        if(fileTypeMap.get(FileType.DICT)) {
+            rafDict.write(new DictData(term, Integer.toString(numDocs), Integer.toString(start)), row);
+        } else throw new UnsupportedOperationException("Dict not initialized");
     }
 
     /**
@@ -187,6 +261,18 @@ public class InvertedFileWriter {
      * @param start   the start
      */
     public void writeDictRecord(String term, int numDocs, int start) {
-        rafDict.write(new DictData(term, Integer.toString(numDocs), Integer.toString(start)));
+        if(fileTypeMap.get(FileType.DICT)) {
+            rafDict.write(new DictData(term, Integer.toString(numDocs), Integer.toString(start)));
+        } else throw new UnsupportedOperationException("Dict not initialized");
+
+    }
+
+    private void setFileTypeMap(FileType... initializedFileTypes) {
+        for (FileType fileType: initializedFileTypes) {
+            this.fileTypeMap.put(fileType, true);
+        }
+        for (FileType fileType: FileType.values()) {
+            this.fileTypeMap.putIfAbsent(fileType, false);
+        }
     }
 }

@@ -34,7 +34,7 @@ public class GlobalHashTable {
      */
     public GlobalHashTable(int size)
     {
-        this.size=size*3;
+        this.size= (int) (size*3.01942);
         hasFailed = false;
         init();
     }
@@ -194,30 +194,20 @@ public class GlobalHashTable {
      */
     private int find(String str)
     {
-        long sum=0;
-        long index;
 
-        //add all the characters of the string together
-        for(int i=0;i<str.length();i++)
-            sum=(sum*19)+str.charAt(i); //multiply sum by 19 and add byte value of char
-
-        if(sum < 0)				// If calculation of sum was negative, make it positive
-            sum = sum * -1;
-
-        index= sum%size;
-        int index2 = (int) index;
+        int index = Math.abs(str.hashCode())%size;
         boolean onSecondLoop = false;
         /*
          * check to see if the word is in that location
          * if not there, do linear probing until word is found\
          * or empty location found
          */
-        while(!hashtable[index2].getTerm().equals(str) && hashtable[index2].getNumDocs() != -1)
+        while(!hashtable[index].getTerm().equals(str) && hashtable[index].getNumDocs() != -1)
         {
-            index2++;
+            index++;
             collision++;
-            if(index2 >= size) {
-                index2 = 0;
+            if(index >= size) {
+                index = 0;
                 if(onSecondLoop) {
                     hasFailed = true;
                     break;
@@ -226,7 +216,7 @@ public class GlobalHashTable {
             }
         }
 
-        return index2;
+        return index;
     }
 
     public boolean setStart(String term, int start) {

@@ -14,8 +14,7 @@ echo "Creating output directory if not already present"
 
 mkdir $2 2>/dev/null
 
-max_tokens=8
 
-time (java -jar target/hw3-1-spring-boot.jar $1 $2 $max_tokens)
+time (java -jar target/hw3-1-spring-boot.jar $1 $2)
 
 echo "Complete, output is in: $2" 
