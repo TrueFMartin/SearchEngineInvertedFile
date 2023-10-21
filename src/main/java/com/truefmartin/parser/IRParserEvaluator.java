@@ -23,7 +23,7 @@ public class IRParserEvaluator extends IRParserBaseListener {
     private static final Pattern PUNCTUATION =
             Pattern.compile("[,-_./=:;<>?@\\[\\]{|}~!\"#$^`%&'()*+]");
     private static final Pattern CONTENT_START =
-            Pattern.compile("[a-z]+?=\"\\{?");
+            Pattern.compile("[a-zA-z]+?\\s*?=\\s*?\"\\{?");
 
 
     public IRParserEvaluator(String inputFileName, String outFileDir, int hashSize, HTMLParser.SynchronizedCounter synchronizedCounter) {
@@ -77,7 +77,10 @@ public class IRParserEvaluator extends IRParserBaseListener {
             failedFromHash = true;
             return;
         }
-        System.out.println("In " + outputFileName + "--\tTotal tokens: " + numTokens + "\tUnique tokens: " + numUniqueTokens );
+        String debugEnv = System.getenv("DEBUG");
+        if ((debugEnv != null && debugEnv.equals("true"))) {
+            System.out.println("In " + outputFileName + "--\tTotal tokens: " + numTokens + "\tUnique tokens: " + numUniqueTokens );
+        }
         byte[] buffer = hashTable.printSorted().toString().getBytes();
         try {
             FileChannel rwChannel = new RandomAccessFile(outputFileName, "rw").getChannel();

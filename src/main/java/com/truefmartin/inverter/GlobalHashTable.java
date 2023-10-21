@@ -70,7 +70,13 @@ public class GlobalHashTable {
 
         //initialize the hashtable
         for(int i=0;i<this.size;i++)
-            hashtable[i]=new Node("empty",-1, -1);
+            hashtable[i]=new Node("____",-1, -1);
+        String debugEnv = System.getenv("DEBUG");
+        if ((debugEnv != null && debugEnv.equals("true"))) {
+            System.out.println("Collisions: "+collision+" Used: "+used+
+                    " Lookups: "+lookups + " Size: " + size);
+        }
+
     }
 
     /**
@@ -86,6 +92,16 @@ public class GlobalHashTable {
             }
         }
         return numUnique;
+    }
+
+    public interface HashPrint {
+        void hashPrint(String term, int freq, int start);
+    }
+
+    public void printToAny(HashPrint fn) {
+        for(Node node: hashtable) {
+            fn.hashPrint(node.term, node.numDocs, node.start);
+        }
     }
 
     /**

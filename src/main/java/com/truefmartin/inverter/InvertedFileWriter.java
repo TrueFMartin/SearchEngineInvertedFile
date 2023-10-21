@@ -16,7 +16,7 @@ public class InvertedFileWriter {
     /**
      * The Default token size.
      */
-    static final int DEFAULT_TOKEN_SIZE = 14;
+    static final int DEFAULT_TOKEN_SIZE = 25;
     /**
      * The Default num docs size.
      */
@@ -28,7 +28,7 @@ public class InvertedFileWriter {
     /**
      * The Default start size.
      */
-    static final int DEFAULT_START_SIZE = 4;
+    static final int DEFAULT_START_SIZE = 6;
     /**
      * The Default doc id size.
      */

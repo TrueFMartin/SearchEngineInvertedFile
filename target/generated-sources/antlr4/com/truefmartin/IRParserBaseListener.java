@@ -53,18 +53,6 @@ public class IRParserBaseListener implements IRParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTag(IRParser.TagContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTag(IRParser.TagContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterNoTagStart(IRParser.NoTagStartContext ctx) { }
 	/**
 	 * {@inheritDoc}

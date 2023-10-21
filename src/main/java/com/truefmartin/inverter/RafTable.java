@@ -255,9 +255,9 @@ public class RafTable <T extends Writeable> implements AutoCloseable {
                             + " does not match number of columns for RafTable: " + NUM_COLUMNS);
                 }
                 String next = data.getNext();
-                String docIDFormat = "%" + size + "s" + " ";
+                String formatter = "%" + size + "s" + " ";
 
-                stream.write(String.format(docIDFormat, next
+                stream.write(String.format(formatter, next
                         .substring(0, Math.min(next.length(), size))).getBytes());
             }
             numRecords += 1;

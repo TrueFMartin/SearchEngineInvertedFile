@@ -24,8 +24,14 @@ public class HTMLParser {
     private final String inFileDir;
     public int largestFileSize;
     private SynchronizedCounter synchronizedCounter;
+    private int docHtSizeOverride = -1;
+
+    private final boolean debug;
+    //---------- NOT USED YET ---------------
     public static final int TERM_SIZE = 14;
     public static final int FREQ_SIZE = 6;
+    //--------------------------------------
+
 
     public HTMLParser(String inFileDir, String outFileDir, int largestFileSize, int largestFileNumUnique) {
         this.inFileDir = inFileDir;
@@ -33,6 +39,12 @@ public class HTMLParser {
         this.outFileDir = outFileDir;
         this.largestFileNumUnique = largestFileNumUnique;
         this.synchronizedCounter = new SynchronizedCounter();
+        String docHashOverride = System.getenv("DHT_SIZE");
+        if(docHashOverride != null && !docHashOverride.isEmpty()) {
+            docHtSizeOverride = Integer.parseInt(docHashOverride);
+        }
+        String debugEnv = System.getenv("DEBUG");
+        debug = (debugEnv != null && debugEnv.equals("true"));
     }
 
     public Set<String> begin() {
@@ -62,8 +74,10 @@ public class HTMLParser {
             executor.shutdown();
             if (IRParserEvaluator.isFailedFromHash())
                 throw new RuntimeException("ERROR: Hash table to small. Rerun with a larger third arg input.");
-            System.out.println("Number of total tokens in corpus: " + synchronizedCounter.getNumTokens());
-            System.out.println("Number of unique terms per document summed: " + synchronizedCounter.getNumTokensUnique());
+            if (this.debug) {
+                System.out.println("Number of total tokens in corpus: " + synchronizedCounter.getNumTokens());
+                System.out.println("Number of unique terms per document summed: " + synchronizedCounter.getNumTokensUnique());
+            }
 
             return htmlFiles.keySet();
         }
@@ -88,8 +102,16 @@ public class HTMLParser {
          in that largest file.
          Increase that by 1.25 for safety and add 10 for very small files.
         */
-        int docHashTableSize = (int) (((fileSize / largestFileSize ) * largestFileNumUnique) * 1.25 + 10);
-
+        int docHashTableSize;
+        if (docHtSizeOverride == -1) {
+            docHashTableSize = (int) (((fileSize * 1.0 / largestFileSize ) * largestFileNumUnique) * 1.25 + 10);
+        } else {
+            // User passed in an override
+            docHashTableSize = docHtSizeOverride;
+        }
+        if (debug) {
+            System.out.println("H-table size: "  + docHashTableSize + "\tfor: " + filePath);
+        }
         // Create an instance of listener that handles exiting of rules
         IRParserBaseListener customListener = new IRParserEvaluator(
                 filePath, outFileDir, docHashTableSize, synchronizedCounter);

@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,11 +23,17 @@ public class Main {
         int largestFileNumUnique = args.length >= 4 ? Integer.parseInt(args[2]) : 5795;
 
         HTMLParser htmlParser = new HTMLParser(inFileDir, outFileDir, largestFileSize, largestFileNumUnique);
-        Set<String> fileNames = htmlParser.begin();
+        List<String> fileNames = new ArrayList<>(htmlParser.begin());
+        fileNames.replaceAll(s -> s.replace(inFileDir, outFileDir));
         // After sorted files are outputted, count the total number of unique words in the directory
         Set<String> uniqueWords = countUniqueWords(outFileDir);
-        System.out.println("Number of unique words for entire directory: " + uniqueWords.size());
-        Inverter inverter = new Inverter(uniqueWords.size(), fileNames, outFileDir + "/");
+        String debugEnv = System.getenv("DEBUG");
+        if ((debugEnv != null && debugEnv.equals("true"))) {
+            System.out.println("Number of unique words for entire directory: " + uniqueWords.size());
+        }
+        // Prepare for the inverter
+        Inverter inverter = new Inverter(uniqueWords.size(), fileNames );
+        // I'm not sure if this helps or not, but maybe garbage collector can start working a little sooner.
         fileNames = null;
         List<String> uniqueWordsSorted = uniqueWords.stream().sorted().collect(Collectors.toList());
         uniqueWords = null;
