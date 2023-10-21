@@ -103,7 +103,7 @@ public class HTMLParser {
          Increase that by 1.25 for safety and add 10 for very small files.
         */
         int docHashTableSize;
-        if (docHtSizeOverride == -1) {
+        if (docHtSizeOverride < 1 ) {
             docHashTableSize = (int) (((fileSize * 1.0 / largestFileSize ) * largestFileNumUnique) * 1.25 + 10);
         } else {
             // User passed in an override

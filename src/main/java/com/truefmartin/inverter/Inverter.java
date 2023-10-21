@@ -17,12 +17,16 @@ public class Inverter {
     private final int DOC_ID_SIZE;
     private final int FILE_NAME_SIZE;
 //---------------------------------------------------
-    private final int BUFFERED_READ_SIZE = 400;
+    // Default buffer size
+    private int BUFFERED_READ_SIZE = 400;
 
     private LinkedList<SortedBuffer> sortedBuffers;
 
     public Inverter(int numTerms, final List<String> fileNames) {
         this.NUM_TERMS = numTerms;
+        String bufferSizeEnv = System.getenv("BUFFER_SIZE");
+        if (bufferSizeEnv != null && Integer.parseInt(bufferSizeEnv) > 0)
+            BUFFERED_READ_SIZE = Integer.parseInt(bufferSizeEnv);
         this.sortedBuffers = new LinkedList<>();
         // ----Not used yet ----
         this.DOC_ID_SIZE = 0;
