@@ -78,11 +78,11 @@ public class Inverter {
                 if (!term.equals(entry.term)) {
                     continue;
                 }
-                // Update the latest term in buffer, increment the buffer
-                buffer.next();
                 numDocs++;
                 // Write a postings entry
                 postWriter.writePostRecord(entry.docID, entry.freq);
+                // Update the latest term in buffer, increment the buffer
+                buffer.next();
             }
             globalHashTable.insert(term, numDocs, start);
             start += numDocs;
