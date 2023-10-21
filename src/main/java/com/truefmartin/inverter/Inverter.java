@@ -17,7 +17,7 @@ public class Inverter {
     private final int DOC_ID_SIZE;
     private final int FILE_NAME_SIZE;
 //---------------------------------------------------
-    // Default buffer size
+    // Default buffer size:
     private int BUFFERED_READ_SIZE = 400;
 
     private LinkedList<SortedBuffer> sortedBuffers;
