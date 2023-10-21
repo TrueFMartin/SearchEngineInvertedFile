@@ -24,7 +24,7 @@ public class InvertedFileWriter {
     /**
      * The Default file name size.
      */
-    static final int DEFAULT_FILE_NAME_SIZE = 16;
+    static final int DEFAULT_FILE_NAME_SIZE = 10;
     /**
      * The Default start size.
      */
