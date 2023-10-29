@@ -120,7 +120,7 @@ public class HTMLParser {
         IRParser.DocumentContext documentContext = parser.document();
     }
 
-    private static Map<String, Long> getHTMLFilesFromDirectory(String directoryPath) {
+    public static Map<String, Long> getHTMLFilesFromDirectory(String directoryPath) {
         try (Stream<Path> stream = Files.list(Paths.get(directoryPath))) {
             return stream
                     .filter(file -> !Files.isDirectory(file))

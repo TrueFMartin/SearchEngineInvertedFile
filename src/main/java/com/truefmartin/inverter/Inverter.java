@@ -1,14 +1,10 @@
 package com.truefmartin.inverter;
 
-import com.ibm.icu.impl.locale.XCldrStub;
-import org.stringtemplate.v4.misc.MultiMap;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.concurrent.PriorityBlockingQueue;
 
 public class Inverter {
     private final int NUM_TERMS;
@@ -21,11 +17,12 @@ public class Inverter {
 //---------------------------------------------------
     // Default buffer size:
     private int BUFFERED_READ_SIZE = 400;
-
+    private final int CORPUS_SIZE;
     private LinkedList<SortedBuffer> sortedBuffers;
 
     public Inverter(int numTerms, final List<String> fileNames) {
         this.NUM_TERMS = numTerms;
+        CORPUS_SIZE = fileNames.size();
         String bufferSizeEnv = System.getenv("BUFFER_SIZE");
         if (bufferSizeEnv != null && Integer.parseInt(bufferSizeEnv) > 0)
             BUFFERED_READ_SIZE = Integer.parseInt(bufferSizeEnv);
@@ -55,7 +52,7 @@ public class Inverter {
         }
     }
 
-    public void fillGlobalHash(List<String> uniquesSorted) {
+    public void fillGlobalHash(List<AbstractMap.SimpleEntry<String, Integer>> uniquesSorted) {
         // Open the buffered readers in each buffer
         for(SortedBuffer buffer: sortedBuffers) {
             buffer.open();
@@ -66,11 +63,13 @@ public class Inverter {
         FileEntry entry = new FileEntry();
         int start = 0;
         // For each unique term (use this instead of searching array to reduce time complexity at cost of memory)
-        for(String term: uniquesSorted) {
+        for(AbstractMap.SimpleEntry<String, Integer> termToNumDoc: uniquesSorted) {
+            String term = termToNumDoc.getKey();
+            int numDocs = termToNumDoc.getValue();
+            double idf = Math.log(CORPUS_SIZE*1.0/numDocs) + 1;
             // Iterator for the linked list
             Iterator<SortedBuffer> itr = sortedBuffers.iterator();
             // This term has been found in 0 docs
-            int numDocs = 0;
 
             while (itr.hasNext()){
                 SortedBuffer buffer = itr.next();
@@ -84,12 +83,19 @@ public class Inverter {
                 if (!term.equals(entry.term)) {
                     continue;
                 }
-                numDocs++;
+                // Ignore terms only appearing in one document
+                if (numDocs == 1) {
+                    buffer.next();
+                    break;
+                }
+                int weight = (int) (10E7 * entry.freq * idf);
                 // Write a postings entry
-                postWriter.writePostRecord(entry.docID, entry.freq);
+                postWriter.writePostRecord(entry.docID, weight);
                 // Update the latest term in buffer, increment the buffer
                 buffer.next();
             }
+            if (numDocs == 1)
+                continue;
             globalHashTable.insert(term, numDocs, start);
             start += numDocs;
         }
@@ -105,7 +111,7 @@ public class Inverter {
     // Holds the contents and information about each entry in the sorted temporary files
     private class FileEntry {
         String term;
-        int freq;
+        double freq;
         int docID;
 
         public FileEntry() {
@@ -156,7 +162,7 @@ public class Inverter {
                 if (line != null) {
                     String[] splitLine = line.split(" ");
                     this.entry.term = splitLine[0];
-                    this.entry.freq = Integer.parseInt(splitLine[1]);
+                    this.entry.freq = Double.parseDouble(splitLine[1]);
                 } else {
                     reader.close();
                     this.isClosed = true;

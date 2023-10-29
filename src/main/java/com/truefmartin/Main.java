@@ -4,13 +4,10 @@ import com.truefmartin.inverter.Inverter;
 import com.truefmartin.parser.HTMLParser;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -26,7 +23,7 @@ public class Main {
         List<String> fileNames = new ArrayList<>(htmlParser.begin());
         fileNames.replaceAll(s -> s.replace(inFileDir, outFileDir));
         // After sorted files are outputted, count the total number of unique words in the directory
-        Set<String> uniqueWords = countUniqueWords(outFileDir);
+        HashMap<String, Integer> uniqueWords = countUniqueWords(outFileDir);
         String debugEnv = System.getenv("DEBUG");
         if ((debugEnv != null && debugEnv.equals("true"))) {
             System.out.println("Number of unique words for entire directory: " + uniqueWords.size());
@@ -35,37 +32,68 @@ public class Main {
         Inverter inverter = new Inverter(uniqueWords.size(), fileNames );
         // I'm not sure if this helps or not, but maybe garbage collector can start working a little sooner.
         fileNames = null;
-        List<String> uniqueWordsSorted = uniqueWords.stream().sorted().collect(Collectors.toList());
+        List<AbstractMap.SimpleEntry<String, Integer>> uniqueWordsSorted = uniqueWords.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())  // Sort by token
+                .map(AbstractMap.SimpleEntry::new) // Java doesn't have a Pair<T,K> class
+                .collect(Collectors.toList());
         uniqueWords = null;
         inverter.fillGlobalHash(uniqueWordsSorted);
         uniqueWordsSorted = null;
 
     }
     // Count the number of unique words in the output directory, only reads first space separated column
-    private static Set<String> countUniqueWords(String directoryPath) {
-        Set<String> uniqueWords = new HashSet<>();
+    private static HashMap<String, Integer> countUniqueWords(String directoryPath) {
+        HashMap<String, Integer> uniqueWords = new HashMap<>();
 
-        File directory = new File(directoryPath);
-        File[] files = directory.listFiles();
+        BlockingQueue<String> queue = new LinkedBlockingQueue<>();
+        int numThreads = Runtime.getRuntime().availableProcessors();
+        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
 
-        if (files != null) {
-            for (File file : files) {
-                if (file.isFile()) {
-                    try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                            String[] columns = line.split("\\s+");
-                            if (columns.length > 0) {
-                                uniqueWords.add(columns[0]);
-                            }
+        // Get a map of FileName to FileLength in bytes. FileLength is not used this time
+        Map<String, Long> files = HTMLParser.getHTMLFilesFromDirectory(directoryPath);
+
+        // Create a list of Callable tasks for parsing
+        List<Callable<Void>> tasks = new LinkedList<>();
+        for (String file: files.keySet()) {
+            tasks.add(() -> {
+                try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        String[] columns = line.split("\\s+");
+                        if (columns.length > 0) {
+                            queue.put(columns[0]);
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            }
+                return null;
+            });
         }
 
+        Thread consumer = null;
+        try {
+            consumer = new Thread(() -> {
+                while(!queue.isEmpty()) {
+                    try {
+                        uniqueWords.merge(queue.take(), 1, Integer::sum);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+            });
+            executor.invokeAll(tasks);
+            consumer.start();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            executor.shutdown();
+            try {
+                Objects.requireNonNull(consumer).join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
         return uniqueWords;
     }
 }
