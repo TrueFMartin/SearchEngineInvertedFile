@@ -6,8 +6,7 @@ import com.truefmartin.IRParserBaseListener;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,7 +24,6 @@ public class HTMLParser {
     public int largestFileSize;
     private SynchronizedCounter synchronizedCounter;
     private int docHtSizeOverride = -1;
-
     private final boolean debug;
     //---------- NOT USED YET ---------------
     public static final int TERM_SIZE = 14;
@@ -133,8 +131,6 @@ public class HTMLParser {
             throw new RuntimeException(e);
         }
     }
-
-
 
     protected static class SynchronizedCounter {
 

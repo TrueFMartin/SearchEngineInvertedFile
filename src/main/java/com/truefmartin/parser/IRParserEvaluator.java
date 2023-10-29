@@ -81,7 +81,7 @@ public class IRParserEvaluator extends IRParserBaseListener {
         if ((debugEnv != null && debugEnv.equals("true"))) {
             System.out.println("In " + outputFileName + "--\tTotal tokens: " + numTokens + "\tUnique tokens: " + numUniqueTokens );
         }
-        byte[] buffer = hashTable.printSorted().toString().getBytes();
+        byte[] buffer = hashTable.printSorted(numTokens).toString().getBytes();
         try {
             FileChannel rwChannel = new RandomAccessFile(outputFileName, "rw").getChannel();
             ByteBuffer wrBuf = rwChannel.map(FileChannel.MapMode.READ_WRITE, 0, buffer.length);

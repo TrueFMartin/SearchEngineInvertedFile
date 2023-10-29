@@ -14,16 +14,17 @@ import java.util.*;
  */
 public class DocumentHashTable
 {
-    private int size;
+    private final int size;
     private long used;
     private long collision;
     private long lookups;
     private Node[] hashtable;
-
+    private StopWords stopWords;
     private boolean hasFailed;
 
     private final static int TERM_SIZE = HTMLParser.TERM_SIZE;
     private final static int FREQ_SIZE = HTMLParser.FREQ_SIZE;
+
 
     /**
      * Initializes a hashtable with size 3 times the size given.
@@ -34,6 +35,7 @@ public class DocumentHashTable
     {
         this.size= (int) (size*3.01942);
         hasFailed = false;
+        this.stopWords = StopWords.getInstance();
         init();
     }
 
@@ -68,7 +70,7 @@ public class DocumentHashTable
 
         //initialize the hashtable
         for(int i=0;i<this.size;i++)
-            hashtable[i]=new Node("empty",-1);
+            hashtable[i]=new Node();
     }
 
     /**
@@ -79,7 +81,7 @@ public class DocumentHashTable
     public int getNumUniqueTerms() {
         int numUnique = 0;
         for (Node node: hashtable) {
-            if (node.freq != -1) {
+            if (node.isNotEmpty()) {
                 numUnique++;
             }
         }
@@ -133,11 +135,24 @@ public class DocumentHashTable
      *
      * @return the string builder
      */
-    public StringBuilder printSorted()
+    public StringBuilder printSorted(int numTokens)
     {
+        int finalNumTokens = numTokens - removeStopWords();
         StringBuilder out = new StringBuilder(size*20);
-        Arrays.stream(this.hashtable).filter(node -> node.getFreq() != -1).sorted().forEachOrdered(out::append);
+        Arrays.stream(this.hashtable).filter(Node::isNotEmpty).sorted().forEachOrdered(node -> out.append(node.rtfPrint(finalNumTokens)));
         return out;
+    }
+
+    private int removeStopWords() {
+        int sum = 0;
+        for (String stopword :
+                StopWords.getInstance().getStopList()) {
+            int index = find(stopword);
+            if (hashtable[index].isNotEmpty()) {
+                sum += hashtable[index].setEmpty();
+            }
+        }
+        return sum;
     }
 
     /**
@@ -151,7 +166,7 @@ public class DocumentHashTable
         int index = find(term);
 
         //if not already in the table, insert it
-        if(hashtable[index].getFreq() == -1)
+        if(hashtable[index].isEmpty())
         {
             hashtable[index].setTerm(term);
             hashtable[index].setFreq(freq);
@@ -177,7 +192,7 @@ public class DocumentHashTable
          * if not there, do linear probing until word is found\
          * or empty location found
          */
-        while(!hashtable[index].getTerm().equals(str) && hashtable[index].getFreq() != -1)
+        while(!hashtable[index].getTerm().equals(str) && hashtable[index].isNotEmpty())
         {
             index++;
             collision++;
@@ -286,6 +301,10 @@ public class DocumentHashTable
         private String term;
         private int freq;
 
+        public Node() {
+            this.term = "";
+            this.freq = -1;
+        }
         /**
          * Instantiates a new Node.
          *
@@ -297,6 +316,21 @@ public class DocumentHashTable
             this.term = term;
             this.freq = freq;
         }
+
+        public int setEmpty() {
+            int prevFreq = this.freq;
+            this.term = "";
+            this.freq = -1;
+            return prevFreq;
+        }
+
+        public boolean isEmpty() {
+            return this.freq == -1;
+        }
+        public boolean isNotEmpty() {
+            return !isEmpty();
+        }
+
 
         /**
          * Gets term.
@@ -343,11 +377,15 @@ public class DocumentHashTable
             return this.term + " " + this.freq + "\n";
         }
 
+        public String rtfPrint(int numTokens) {
+            return String.format("%s %.6f\n", this.term, this.freq*1.0/numTokens);
+        }
+
         @Override
         public int compareTo(Node node) {
-            if (this.freq == -1 && node.freq == -1)
+            if (this.isEmpty() && node.isEmpty())
                 return 0;
-            return this.freq == -1 ? 1: this.term.compareTo(node.term);
+            return this.isEmpty() ? 1: this.term.compareTo(node.term);
         }
     }
 }

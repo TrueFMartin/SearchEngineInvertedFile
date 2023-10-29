@@ -36,7 +36,7 @@ public class InvertedFileWriter {
     /**
      * The Default freq size.
      */
-    static final int DEFAULT_FREQ_SIZE = 4;
+    static final int DEFAULT_FREQ_SIZE = 8;
 
     /**
      * The Filename map.

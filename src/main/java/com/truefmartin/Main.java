@@ -40,8 +40,6 @@ public class Main {
         inverter.fillGlobalHash(uniqueWordsSorted);
         uniqueWordsSorted = null;
 
-
-
     }
     // Count the number of unique words in the output directory, only reads first space separated column
     private static Set<String> countUniqueWords(String directoryPath) {

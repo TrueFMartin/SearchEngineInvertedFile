@@ -9,7 +9,10 @@ package com.truefmartin.inverter;
 
 import com.truefmartin.parser.HTMLParser;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class GlobalHashTable {
 
@@ -24,8 +27,6 @@ public class GlobalHashTable {
 
     private boolean hasFailed;
 
-//    private final static int TERM_SIZE = HTMLParser.TERM_SIZE;
-//    private final static int NUM_DOCS_SIZE = HTMLParser.FREQ_SIZE;
 
     /**
      * Initializes a hashtable with size 3 times the size given.
@@ -154,17 +155,23 @@ public class GlobalHashTable {
     public StringBuilder printSorted()
     {
         StringBuilder out = new StringBuilder(size*20);
-        Arrays.stream(this.hashtable).filter(node -> node.getNumDocs() != -1).sorted().forEachOrdered(out::append);
+        Arrays.stream(this.hashtable).filter(Node::isNotEmpty).sorted().forEachOrdered(out::append);
         return out;
     }
 
+    public List<String> getSortedTerms() {
+        List<String> sorted = new ArrayList<>();
+        Arrays.stream(hashtable).filter(Node::isNotEmpty).sorted().forEachOrdered(node -> sorted.add(node.term));
+        return sorted;
+    }
+
     /**
-     * Insert string term, and int numDocs into hashtable, hashes on term.
+     * Insert string term, set numDocs to 1, hashes on term. If already present in table,
+     * increases Node's numDocs by 1.
      *
      * @param term String to be hashed.
-     * @param numDocs String
      */
-    public void insert(String term, int numDocs)
+    public void insert(String term)
     {
         int index = find(term);
 
@@ -172,12 +179,13 @@ public class GlobalHashTable {
         if(hashtable[index].getNumDocs() == -1)
         {
             hashtable[index].setTerm(term);
-            hashtable[index].setNumDocs(numDocs);
+            hashtable[index].setNumDocs(1);
             used++;
         } else { //increment numDocs
             hashtable[index].numDocs++;
         }
     }
+
 
 
     /**
@@ -191,7 +199,7 @@ public class GlobalHashTable {
         int index = find(term);
 
         //if not already in the table, insert it
-        if(hashtable[index].getNumDocs() == -1)
+        if(hashtable[index].isEmpty())
         {
             hashtable[index].setTerm(term);
             hashtable[index].setNumDocs(numDocs);
@@ -218,7 +226,7 @@ public class GlobalHashTable {
          * if not there, do linear probing until word is found\
          * or empty location found
          */
-        while(!hashtable[index].getTerm().equals(str) && hashtable[index].getNumDocs() != -1)
+        while(!hashtable[index].getTerm().equals(str) && hashtable[index].isNotEmpty())
         {
             index++;
             collision++;
@@ -237,7 +245,7 @@ public class GlobalHashTable {
 
     public boolean setStart(String term, int start) {
         int index = find(term);
-        if (hashtable[index].getNumDocs() == -1)
+        if (hashtable[index].isEmpty())
             return false;
         hashtable[index].setStart(start);
         return true;
@@ -409,6 +417,13 @@ public class GlobalHashTable {
 
         public void setStart(int start) {
             this.start = start;
+        }
+
+        public boolean isEmpty() {
+            return this.numDocs == -1;
+        }
+        public boolean isNotEmpty() {
+            return !isEmpty();
         }
 
         @Override
