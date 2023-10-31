@@ -1,6 +1,7 @@
 /home/true/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/inverter/ColumnBoundsException.java
 /home/true/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/parser/DocumentHashTable.java
 /home/true/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/inverter/structs/Writeable.java
+/home/true/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/parser/StopWords.java
 /home/true/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/inverter/InvertedFileWriter.java
 /home/true/ir/AntlrHW1Pt2/target/generated-sources/antlr4/com/truefmartin/IRParserListener.java
 /home/true/ir/AntlrHW1Pt2/target/generated-sources/antlr4/com/truefmartin/IRParserBaseListener.java

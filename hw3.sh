@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Franklin True Martin HW3 part 1"
+echo "Franklin True Martin HW3 part 2"
 echo "This project is created using Antlr4 Lexer/Parser, \
 and will output the time it takes for the files to be parsed \
 at the end."
@@ -15,6 +15,6 @@ echo "Creating output directory if not already present"
 mkdir $2 2>/dev/null
 
 
-time (export DEBUG="false"; export DHT_SIZE="-1"; java -jar target/hw3-1-spring-boot.jar $1 $2)
+time (export DEBUG="false"; export DHT_SIZE="-1"; java -jar target/hw3-2-spring-boot.jar $1 $2)
 
 echo "Complete, output is in: $2" 
