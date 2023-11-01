@@ -150,6 +150,7 @@ public class DocumentHashTable
             int index = find(stopword);
             if (hashtable[index].isNotEmpty()) {
                 sum += hashtable[index].setEmpty();
+                used--;
             }
         }
         return sum;

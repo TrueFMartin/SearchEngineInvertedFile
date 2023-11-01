@@ -15,6 +15,6 @@ echo "Creating output directory if not already present"
 mkdir $2 2>/dev/null
 
 
-time (export DEBUG="false"; export DHT_SIZE="-1"; java -jar target/hw3-2-spring-boot.jar $1 $2)
+time (export DEBUG="false"; export DHT_SIZE="-1"; java -jar target/hw4-1-spring-boot.jar $1 $2)
 
 echo "Complete, output is in: $2" 
