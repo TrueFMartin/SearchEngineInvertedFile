@@ -1,4 +1,4 @@
-// Generated from com\truefmartin\IRParser.g4 by ANTLR 4.12.0
+// Generated from com/truefmartin/IRParser.g4 by ANTLR 4.12.0
 package com.truefmartin;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -37,16 +37,6 @@ public interface IRParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitTagStart(IRParser.TagStartContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link IRParser#tag}.
-	 * @param ctx the parse tree
-	 */
-	void enterTag(IRParser.TagContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link IRParser#tag}.
-	 * @param ctx the parse tree
-	 */
-	void exitTag(IRParser.TagContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link IRParser#noTagStart}.
 	 * @param ctx the parse tree

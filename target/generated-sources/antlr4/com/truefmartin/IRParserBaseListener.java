@@ -1,4 +1,4 @@
-// Generated from com\truefmartin\IRParser.g4 by ANTLR 4.12.0
+// Generated from com/truefmartin/IRParser.g4 by ANTLR 4.12.0
 package com.truefmartin;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -48,18 +48,6 @@ public class IRParserBaseListener implements IRParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitTagStart(IRParser.TagStartContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterTag(IRParser.TagContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTag(IRParser.TagContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

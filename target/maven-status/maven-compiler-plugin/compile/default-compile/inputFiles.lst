@@ -1,6 +1,19 @@
-C:\Users\truef\OneDrive - University of Arkansas\School\InfoRet\AntlrHW1 - Copy\target\generated-sources\antlr4\com\truefmartin\IRParserListener.java
-C:\Users\truef\OneDrive - University of Arkansas\School\InfoRet\AntlrHW1 - Copy\src\main\java\com\truefmartin\HTMLParser.java
-C:\Users\truef\OneDrive - University of Arkansas\School\InfoRet\AntlrHW1 - Copy\target\generated-sources\antlr4\com\truefmartin\IRParser.java
-C:\Users\truef\OneDrive - University of Arkansas\School\InfoRet\AntlrHW1 - Copy\target\generated-sources\antlr4\com\truefmartin\IRParserBaseListener.java
-C:\Users\truef\OneDrive - University of Arkansas\School\InfoRet\AntlrHW1 - Copy\target\generated-sources\antlr4\com\truefmartin\IRLexer.java
-C:\Users\truef\OneDrive - University of Arkansas\School\InfoRet\AntlrHW1 - Copy\src\main\java\com\truefmartin\IRParserEvaluator.java
+/Users/truef/code/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/parser/IRParserEvaluator.java
+/Users/truef/code/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/inverter/structs/MapData.java
+/Users/truef/code/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/parser/StopWords.java
+/Users/truef/code/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/inverter/structs/PostData.java
+/Users/truef/code/ir/AntlrHW1Pt2/target/generated-sources/antlr4/com/truefmartin/IRParserListener.java
+/Users/truef/code/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/inverter/RafTable.java
+/Users/truef/code/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/Main.java
+/Users/truef/code/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/inverter/structs/Writeable.java
+/Users/truef/code/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/inverter/InvertedFileWriter.java
+/Users/truef/code/ir/AntlrHW1Pt2/target/generated-sources/antlr4/com/truefmartin/IRLexer.java
+/Users/truef/code/ir/AntlrHW1Pt2/target/generated-sources/antlr4/com/truefmartin/IRParserBaseListener.java
+/Users/truef/code/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/parser/DocumentHashTable.java
+/Users/truef/code/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/parser/HTMLParser.java
+/Users/truef/code/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/inverter/Inverter.java
+/Users/truef/code/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/inverter/InvertedFileReader.java
+/Users/truef/code/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/inverter/ColumnBoundsException.java
+/Users/truef/code/ir/AntlrHW1Pt2/target/generated-sources/antlr4/com/truefmartin/IRParser.java
+/Users/truef/code/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/inverter/structs/DictData.java
+/Users/truef/code/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/inverter/GlobalHashTable.java
