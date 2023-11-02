@@ -3,6 +3,7 @@ package com.truefmartin.parser;
 import com.truefmartin.IRLexer;
 import com.truefmartin.IRParser;
 import com.truefmartin.IRParserBaseListener;
+import com.truefmartin.Main;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
@@ -19,11 +20,8 @@ import java.util.stream.Stream;
 
 public class HTMLParser {
     private String outFileDir;
-    private final int largestFileNumUnique;
     private final String inFileDir;
-    public int largestFileSize;
     private SynchronizedCounter synchronizedCounter;
-    private int docHtSizeOverride = -1;
     private final boolean debug;
     //---------- NOT USED YET ---------------
     public static final int TERM_SIZE = 14;
@@ -31,21 +29,14 @@ public class HTMLParser {
     //--------------------------------------
 
 
-    public HTMLParser(String inFileDir, String outFileDir, int largestFileSize, int largestFileNumUnique) {
+    public HTMLParser(String inFileDir, String outFileDir) {
         this.inFileDir = inFileDir;
-        this.largestFileSize = largestFileSize;
         this.outFileDir = outFileDir;
-        this.largestFileNumUnique = largestFileNumUnique;
         this.synchronizedCounter = new SynchronizedCounter();
-        String docHashOverride = System.getenv("DHT_SIZE");
-        if(docHashOverride != null && !docHashOverride.isEmpty()) {
-            docHtSizeOverride = Integer.parseInt(docHashOverride);
-        }
-        String debugEnv = System.getenv("DEBUG");
-        debug = (debugEnv != null && debugEnv.equals("true"));
+        debug = Main.DEBUG_MODE;
     }
 
-    public Set<String> begin() {
+    public Set<String> begin(DocumentHashTable.HashTableSizeInterface dhtSizeCalc) {
         // Get max number of processors as possible
         int numThreads = Runtime.getRuntime().availableProcessors();
         ExecutorService executor = Executors.newFixedThreadPool(numThreads);
@@ -58,7 +49,7 @@ public class HTMLParser {
 
         for (Map.Entry<String, Long> fileEntry: htmlFiles.entrySet()) {
             tasks.add(() -> {
-                parseHTMLFile(fileEntry.getKey(), fileEntry.getValue());
+                parseHTMLFile(fileEntry.getKey(), fileEntry.getValue(), dhtSizeCalc);
                 return null;
             });
         }
@@ -81,7 +72,7 @@ public class HTMLParser {
         }
     }
 
-    private void parseHTMLFile(String filePath, Long fileSize) {
+    private void parseHTMLFile(String filePath, Long fileSize, DocumentHashTable.HashTableSizeInterface dhtSizeCalc) {
         IRLexer lexer;
         try {
             lexer = new IRLexer(CharStreams.fromFileName(filePath));
@@ -93,26 +84,12 @@ public class HTMLParser {
         IRParser parser = new IRParser(tokens);
         parser.removeErrorListeners();
 
-        /*
-         Calculate an estimated number of unique terms in this file.
-         Compare this file size to the file size of the file with the highest
-         number of unique words, and take that % of the number of unique terms
-         in that largest file.
-         Increase that by 1.25 for safety and add 10 for very small files.
-        */
-        int docHashTableSize;
-        if (docHtSizeOverride < 1 ) {
-            docHashTableSize = (int) (((fileSize * 1.0 / largestFileSize ) * largestFileNumUnique) * 1.25 + 10);
-        } else {
-            // User passed in an override
-            docHashTableSize = docHtSizeOverride;
-        }
         if (debug) {
-            System.out.println("H-table size: "  + docHashTableSize + "\tfor: " + filePath);
+            System.out.println("H-table size: "  + dhtSizeCalc.calcSize(fileSize) + "\tfor: " + filePath);
         }
         // Create an instance of listener that handles exiting of rules
         IRParserBaseListener customListener = new IRParserEvaluator(
-                filePath, outFileDir, docHashTableSize, synchronizedCounter);
+                filePath, outFileDir, dhtSizeCalc.calcSize(fileSize), synchronizedCounter);
 
         parser.addParseListener(customListener);
 
