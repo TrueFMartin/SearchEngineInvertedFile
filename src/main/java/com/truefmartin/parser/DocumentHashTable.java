@@ -14,6 +14,9 @@ import java.util.*;
  */
 public class DocumentHashTable
 {
+    public interface HashTableSizeInterface {
+        public int calcSize(Long fileSize);
+    }
     private final int size;
     private long used;
     private long collision;
@@ -148,7 +151,7 @@ public class DocumentHashTable
         for (String stopword :
                 StopWords.getInstance().getStopList()) {
             int index = find(stopword);
-            if (hashtable[index].isNotEmpty()) {
+            if (hashtable[index].isNotEmpty() || hashtable[index].term.length() == 1) {
                 sum += hashtable[index].setEmpty();
                 used--;
             }

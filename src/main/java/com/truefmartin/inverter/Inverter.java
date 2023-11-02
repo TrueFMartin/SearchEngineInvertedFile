@@ -1,10 +1,8 @@
 package com.truefmartin.inverter;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.*;
 
 public class Inverter {
     private final int NUM_TERMS;
@@ -18,15 +16,18 @@ public class Inverter {
     // Default buffer size:
     private int BUFFERED_READ_SIZE = 400;
     private final int CORPUS_SIZE;
-    private LinkedList<SortedBuffer> sortedBuffers;
+    private int numThreads;
 
-    public Inverter(int numTerms, final List<String> fileNames) {
+    ArrayList<BufferThread> bufferThreads;
+    ConcurrentLinkedQueue<AbstractMap.SimpleEntry<Integer, Integer>> queue;
+    PostWriterThread postWriterRunner;
+    Phaser barrierLock;
+
+
+    public Inverter(int numTerms, final List<String> fileNames, int bufferSize) {
         this.NUM_TERMS = numTerms;
         CORPUS_SIZE = fileNames.size();
-        String bufferSizeEnv = System.getenv("BUFFER_SIZE");
-        if (bufferSizeEnv != null && Integer.parseInt(bufferSizeEnv) > 0)
-            BUFFERED_READ_SIZE = Integer.parseInt(bufferSizeEnv);
-        this.sortedBuffers = new LinkedList<>();
+        BUFFERED_READ_SIZE = bufferSize;
         // ----Not used yet ----
         this.DOC_ID_SIZE = 0;
         this.NUM_DOC_SIZE = 0;
@@ -44,139 +45,84 @@ public class Inverter {
             }
             mapFileWriter.closeAfterWriting();
         }).start();
+        queue = new ConcurrentLinkedQueue<>();
+        barrierLock = new Phaser();
 
+        this.numThreads = Runtime.getRuntime().availableProcessors();
         // Initialize the buffers
+        bufferThreads = new ArrayList<>();
         int index = 0;
-        for (String fileName: fileNames) {
-            sortedBuffers.addLast(new SortedBuffer(fileName, index++));
+        int numBuffers = CORPUS_SIZE / numThreads;
+        int remainder = 0;
+        for (int i = 1; i <= numThreads; i++) {
+            // If in last group of sorted buffers, add the remainder to the total of buffers.
+            if(i == numThreads)
+                remainder = CORPUS_SIZE % numThreads;
+            var tempSortedBuffers = new LinkedList<SortedBuffer>();
+            // Create a linked list of all buffers using this portion files (numBuffers * i)
+            while( index < numBuffers * i + remainder) {
+                tempSortedBuffers.addLast(new SortedBuffer(fileNames.get(index), index++, BUFFERED_READ_SIZE));
+            }
+            bufferThreads.add(new BufferThread(tempSortedBuffers, queue, barrierLock));
         }
     }
 
-    public void fillGlobalHash(List<AbstractMap.SimpleEntry<String, Integer>> uniquesSorted) {
+    public void fillGlobalHash(List<AbstractMap.SimpleEntry<String, Integer>> uniquesSorted, int ghtSize) {
         // Open the buffered readers in each buffer
-        for(SortedBuffer buffer: sortedBuffers) {
-            buffer.open();
+        GlobalHashTable globalHashTable;
+        if (ghtSize == -1) {
+            globalHashTable = new GlobalHashTable(NUM_TERMS);
+        } else {
+            globalHashTable = new GlobalHashTable(ghtSize);
         }
-        GlobalHashTable globalHashTable = new GlobalHashTable(NUM_TERMS);
+
+        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
+        bufferThreads.forEach(BufferThread::openBuffer);
         // Get post ready to write
-        InvertedFileWriter postWriter = new InvertedFileWriter(InvertedFileWriter.FileType.POST);
+        postWriterRunner = new PostWriterThread(queue);
+
         FileEntry entry = new FileEntry();
         int start = 0;
-        // For each unique term (use this instead of searching array to reduce time complexity at cost of memory)
-        for(AbstractMap.SimpleEntry<String, Integer> termToNumDoc: uniquesSorted) {
-            String term = termToNumDoc.getKey();
-            int numDocs = termToNumDoc.getValue();
-            double idf = Math.log(CORPUS_SIZE*1.0/numDocs) + 1;
-            // Iterator for the linked list
-            Iterator<SortedBuffer> itr = sortedBuffers.iterator();
-            // This term has been found in 0 docs
+        // Register the main thread with the phaser barrier lock
+        barrierLock.register();
+        try {
+            Thread postWriterThread = new Thread(postWriterRunner);
+            postWriterThread.start();
+            for(BufferThread bufferThread: bufferThreads)
+                executor.submit(bufferThread);
+            // For each unique term (use this instead of searching array to reduce time complexity at cost of memory)
+            for(AbstractMap.SimpleEntry<String, Integer> termToNumDoc: uniquesSorted) {
+                String term = termToNumDoc.getKey();
+                int numDocs = termToNumDoc.getValue();
+                double idf = Math.log(CORPUS_SIZE*1.0/numDocs) + 1;
+                // Wait until all threads are ready for the next term
+                barrierLock.arriveAndAwaitAdvance();
+                bufferThreads.forEach(x -> x.prepareToken(term, idf, numDocs));
+                // Signal to bufferThreads they can begin on the next term.
+                barrierLock.arriveAndAwaitAdvance();
 
-            while (itr.hasNext()){
-                SortedBuffer buffer = itr.next();
-                // If file finished, remove it from linked list so we don't continue to check it
-                if(buffer.isClosed) {
-                    itr.remove();
+                if (numDocs == 1)
                     continue;
-                }
-                // Get current term held by SortedBuffer class (it has already been read from file)
-                entry = buffer.getEntry();
-                if (!term.equals(entry.term)) {
-                    continue;
-                }
-                // Ignore terms only appearing in one document
-                if (numDocs == 1) {
-                    buffer.next();
-                    break;
-                }
-                int weight = (int) (10E7 * entry.freq * idf);
-                // Write a postings entry
-                postWriter.writePostRecord(entry.docID, weight);
-                // Update the latest term in buffer, increment the buffer
-                buffer.next();
+                globalHashTable.insert(term, numDocs, start);
+                start += numDocs;
             }
-            if (numDocs == 1)
-                continue;
-            globalHashTable.insert(term, numDocs, start);
-            start += numDocs;
-        }
-        postWriter.closeAfterWriting();
-        // Prepare to write dict file
-        InvertedFileWriter dictWriter = new InvertedFileWriter(InvertedFileWriter.FileType.DICT);
-        // Write contents of hash file to dict file
-        globalHashTable.printToAny(dictWriter::writeDictRecord);
-
-        dictWriter.closeAfterWriting();
-    }
-
-    // Holds the contents and information about each entry in the sorted temporary files
-    private class FileEntry {
-        String term;
-        double freq;
-        int docID;
-
-        public FileEntry() {
-            this(-1);
-        }
-        public FileEntry(int docID) {
-            this.docID = docID;
-            this.term = "";
-            this.freq = -1;
+        } finally {
+            executor.shutdown();
+            barrierLock.arriveAndDeregister();
+            postWriterRunner.setStop(true);
+            // Prepare to write dict file
+            InvertedFileWriter dictWriter = new InvertedFileWriter(InvertedFileWriter.FileType.DICT);
+            // Write contents of hash file to dict file
+            globalHashTable.printToAny(dictWriter::writeDictRecord);
+            dictWriter.closeAfterWriting();
         }
 
 
     }
 
-    // Holds the buffered reader and the current entry. One SortedBuffer for each temporary sorted file
-    private class SortedBuffer {
-        BufferedReader reader;
-
-        FileEntry entry;
-
-        boolean isClosed = true;
-
-        boolean termUsed = false;
-        Path path;
-        public SortedBuffer(String fileName, int docID) {
-            this.path = Path.of(fileName);
-            this.entry = new FileEntry(docID);
-        }
-
-        public void open(){
-            InputStreamReader stream = null;
-            try {
-                stream = new InputStreamReader(Files.newInputStream(path), StandardCharsets.UTF_8);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            this.reader = new BufferedReader(stream, BUFFERED_READ_SIZE);
-            this.isClosed = false;
-            // Load first 'entry'
-            next();
-        }
-
-        // Progress to next line
-        public void next() {
-            String line = null;
-            try {
-                line = reader.readLine();
-                if (line != null) {
-                    String[] splitLine = line.split(" ");
-                    this.entry.term = splitLine[0];
-                    this.entry.freq = Double.parseDouble(splitLine[1]);
-                } else {
-                    reader.close();
-                    this.isClosed = true;
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (ArrayIndexOutOfBoundsException e) {
-                // Handle odd errors, get the posting # so that the tokenizer can be modified to accommodate.
-                throw new ArrayIndexOutOfBoundsException("Error in Next: " + line + " " +
-                        "with " + this.entry.docID);
-            }
-        }
-        public FileEntry getEntry() {
-            return entry;
-        }
-    }
 }
+
+
+
+
+

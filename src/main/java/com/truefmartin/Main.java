@@ -1,6 +1,7 @@
 package com.truefmartin;
 
 import com.truefmartin.inverter.Inverter;
+import com.truefmartin.parser.DocumentHashTable;
 import com.truefmartin.parser.HTMLParser;
 
 import java.io.BufferedReader;
@@ -11,16 +12,45 @@ import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 public class Main {
+    public static boolean DEBUG_MODE;
     public static void main(String[] args) {
         String inFileDir = args.length >= 1 ? args[0] : "files";
         String outFileDir = args.length >= 2 ? args[1] : "outfiles";
-        // Size in bytes of file with most unique words
-        int largestFileSize = args.length >= 3 ? Integer.parseInt(args[2]) : 39564;
-        // Number of unique words in that file
-        int largestFileNumUnique = args.length >= 4 ? Integer.parseInt(args[2]) : 5795;
+        // Initialize default values for optional CL args
+        boolean debug = false;
+        int bufferSize = 400; // Buffered Reader size in 'Inverter'
+        int dhtSize = -1; // Doc hash table size
+        int ghtSize = -1; // Global hash table size
 
-        HTMLParser htmlParser = new HTMLParser(inFileDir, outFileDir, largestFileSize, largestFileNumUnique);
-        List<String> fileNames = new ArrayList<>(htmlParser.begin());
+        // Parse optional arguments
+        for (String arg : args) {
+            if (arg.equals("-debug")) {
+                debug = true;
+            } else if (arg.startsWith("-buffer-size=")) {
+                bufferSize = Integer.parseInt(arg.split("=")[1]);
+            } else if (arg.startsWith("-dht-size=")) {
+                dhtSize = Integer.parseInt(arg.split("=")[1]);
+            } else if (arg.startsWith("-ght-size=")) {
+                ghtSize = Integer.parseInt(arg.split("=")[1]);
+            }
+        }
+        if (debug)
+            DEBUG_MODE=true;
+
+        DocumentHashTable.HashTableSizeInterface dhtSizeCalc;
+        if (dhtSize == -1) {
+            // Size in bytes of file with most unique words
+            int largestFileSize = 39564;
+            // Number of unique words in that file
+            int largestFileNumUnique = 5795;
+            dhtSizeCalc = fileSize -> (int) (((fileSize * 1.0 / largestFileSize ) * largestFileNumUnique) * 1.25 + 10);
+        } else {
+            int finalDhtSize = dhtSize;
+            dhtSizeCalc = x -> finalDhtSize;
+        }
+
+        HTMLParser htmlParser = new HTMLParser(inFileDir, outFileDir);
+        List<String> fileNames = new ArrayList<>(htmlParser.begin(dhtSizeCalc));
         fileNames.replaceAll(s -> s.replace(inFileDir, outFileDir));
         // After sorted files are outputted, count the total number of unique words in the directory
         HashMap<String, Integer> uniqueWords = countUniqueWords(outFileDir);
@@ -29,7 +59,7 @@ public class Main {
             System.out.println("Number of unique words for entire directory: " + uniqueWords.size());
         }
         // Prepare for the inverter
-        Inverter inverter = new Inverter(uniqueWords.size(), fileNames );
+        Inverter inverter = new Inverter(uniqueWords.size(), fileNames, bufferSize );
         // I'm not sure if this helps or not, but maybe garbage collector can start working a little sooner.
         fileNames = null;
         List<AbstractMap.SimpleEntry<String, Integer>> uniqueWordsSorted = uniqueWords.entrySet().stream()
@@ -37,7 +67,7 @@ public class Main {
                 .map(AbstractMap.SimpleEntry::new) // Java doesn't have a Pair<T,K> class
                 .collect(Collectors.toList());
         uniqueWords = null;
-        inverter.fillGlobalHash(uniqueWordsSorted);
+        inverter.fillGlobalHash(uniqueWordsSorted, ghtSize);
         uniqueWordsSorted = null;
 
     }
