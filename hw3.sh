@@ -1,11 +1,11 @@
 #!/bin/bash
 
 echo "Franklin True Martin HW4 part 1"
-echo "This project is created using Antlr4 as the Lexer/Parser, \\
-Multi-Way Merge Method to build the inverted file, \\
-and TF*IDF for the weights. Query comparissions will be done \\
-using the Vector-Space method. At the end of the program \\
-the inverted file contents will be output. Temporary files \\
+echo "This project is created using Antlr4 as the Lexer/Parser, \
+Multi-Way Merge Method to build the inverted file, \
+and TF*IDF for the weights. Query comparissions will be done \
+using the Vector-Space method. At the end of the program \
+the inverted file contents will be output. Temporary files \
 can be removed with the [-c] OPTION. Use [-h] for more options."
 
 # default values
@@ -16,8 +16,8 @@ DHT_SIZE=""
 GHT_SIZE=""
 
 # optional arguments
-while getopts ":d:h:-:" opt; do
-  case $opt in
+while getopts "dch:-:" opt; do
+  case "${opt}" in
     d)
       DEBUG="true"
       ;;
@@ -28,6 +28,7 @@ while getopts ":d:h:-:" opt; do
       echo "Usage: hw3.sh [OPTIONS] INPUT_DIR OUTPUT_DIR"
       echo "Options:"
       echo "  -d            Enable debug mode"
+      echo "  -c            Clear temporary files afterwards"
       echo "  --buffer-size Set the BufferReader size in bytes"
       echo "  --dht-size    Set the document hash table max buckets"
       echo "  --ght-size    Set the global hash table max buckets"
