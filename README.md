@@ -5,7 +5,7 @@
   - `chmod 700 ./hw3.sh`
   - `./hw3.sh [OPTIONS] input-directory output-directory`
 
-  - `input-directory` is the input file containing the .html webpages you wish to tokenize
+  - `input-directory` is the input directory containing the .html webpages you wish to tokenize
   - `output-directory` will hold temporary files created during the tokenization process
 
 ### Description
