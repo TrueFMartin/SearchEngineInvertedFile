@@ -42,3 +42,5 @@ outfiles-bk/
 test/
 =======
 >>>>>>> 0ce11fa (gitignore)
+/.idea/
+.idea/
