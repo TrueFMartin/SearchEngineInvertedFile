@@ -14,7 +14,9 @@ public class QueryParser extends IRParserEvaluator {
     }
     @Override
     protected void toHashTable(String s) {
-        results.add(s.toLowerCase());
+        if(s.length() > 1) {
+            results.add(s.toLowerCase());
+        }
     }
     @Override
     protected void finish() throws FileNotFoundException {

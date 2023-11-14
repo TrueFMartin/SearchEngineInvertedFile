@@ -15,13 +15,13 @@ public class PostWriterThread implements Runnable{
     @Override
     public void run() {
         try (var postFileWriter = new InvertedFileWriter(InvertedFileWriter.FileType.POST)) {
-            while (!stop) {
-                AbstractMap.SimpleEntry<Integer, Integer> entry;
-                if ((entry = queue.poll()) == null)
-                    continue;
-                postFileWriter.writePostRecord(entry.getKey(), entry.getValue());
+            AbstractMap.SimpleEntry<Integer, Integer> entry;
+            while ((entry = queue.poll()) != null || !stop) {
+                if (entry != null)
+                    postFileWriter.writePostRecord(entry.getKey(), entry.getValue());
             }
         } catch (Exception e) {
+            System.out.println("ERROR in wring POST");
             throw new RuntimeException(e);
         }
     }

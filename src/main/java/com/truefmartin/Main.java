@@ -17,6 +17,7 @@ public class Main {
         if (args[0].equals("build")){
             var builder = new InvertedFileBuilder(relevantArgs);
             builder.begin();
+            return;
         } else if (!args[0].equals("query")) {
             System.out.println("Invalid arguments. Pass in either 'query' or 'build' with their relevant args");
             return;

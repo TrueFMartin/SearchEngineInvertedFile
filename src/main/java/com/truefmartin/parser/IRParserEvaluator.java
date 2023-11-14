@@ -46,8 +46,10 @@ public class IRParserEvaluator extends IRParserBaseListener {
     // Called by every listener that has content to output,
     // Adds a new line and sets to lower case
     protected void toHashTable(String s) {
-        hashTable.insert(s.toLowerCase(), 1);
-        numTokens++;
+        if(s.length() > 1) {
+            hashTable.insert(s.toLowerCase(), 1);
+            numTokens++;
+        }
     }
 
 

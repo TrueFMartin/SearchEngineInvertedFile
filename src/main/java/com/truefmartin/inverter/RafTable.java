@@ -6,6 +6,8 @@ import com.truefmartin.inverter.structs.Writeable;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Semaphore;
@@ -114,7 +116,7 @@ public class RafTable <T extends Writeable> implements AutoCloseable {
         this.OUT_FILE_NAME = "config/" + outFileName;
         this.status = status;
         String data;
-        try (RandomAccessFile configStream = new RandomAccessFile(configFileName, "r")){
+        try (RandomAccessFile configStream = new RandomAccessFile(CONFIG_FILE_NAME, "r")){
             this.stream = new RandomAccessFile(OUT_FILE_NAME, status.fileOpenOption());
             data = configStream.readLine();
         } catch (IOException e) {
@@ -368,7 +370,7 @@ public class RafTable <T extends Writeable> implements AutoCloseable {
         if ((recordNum < 0) || (recordNum >= numRecords)) {
             return false;
         }
-        if (recordNum + numToRead >= numRecords) {
+        if (recordNum + numToRead > numRecords) {
             throw new RowBoundsException("Miscalculated number of records." +
                     "\nTried to read more than is available in file.");
         }
@@ -485,11 +487,16 @@ public class RafTable <T extends Writeable> implements AutoCloseable {
     }
 
     /**
-     * Sets write mode. Starts num records at 0.
+     * Sets write mode. Starts num records at 0. Deletes current file
      */
     public void setWriteModeNew() {
         numRecords = 0;
         closeFile();
+        try {
+            Files.delete(Path.of(OUT_FILE_NAME));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         setNewStream(RafStatus.WRITE);
     }
 
@@ -519,7 +526,11 @@ public class RafTable <T extends Writeable> implements AutoCloseable {
         for(int colSize: colSizes) {
             outString.append(colSize).append(' ');
         }
-
+        try {
+            Files.delete(Path.of(CONFIG_FILE_NAME));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         try(RandomAccessFile configStream = new RandomAccessFile(CONFIG_FILE_NAME, "rw")){
             configStream.write(outString.toString().getBytes());
         } catch (IOException e) {

@@ -49,7 +49,7 @@ while getopts "dch:-:" opt; do
           echo "Invalid option: --${OPTARG}"
           exit 1
           ;;
-      esack
+      esac
       ;;
     \?)
       echo "Invalid option: -$OPTARG"
