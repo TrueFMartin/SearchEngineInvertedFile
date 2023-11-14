@@ -24,5 +24,10 @@ public class PostData extends Writeable{
         System.out.println("DocID: " + this.docId + ", Weight: " + this.weight);
     }
 
+    @Override
+    public boolean isEmpty() {
+        return docId.isEmpty() || this.docId.equals("-1");
+    }
+
 
 }

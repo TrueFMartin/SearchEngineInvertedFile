@@ -3,7 +3,7 @@ package com.truefmartin.parser;
 import com.truefmartin.IRLexer;
 import com.truefmartin.IRParser;
 import com.truefmartin.IRParserBaseListener;
-import com.truefmartin.Main;
+import com.truefmartin.builder.InvertedFileBuilder;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
@@ -33,7 +33,7 @@ public class HTMLParser {
         this.inFileDir = inFileDir;
         this.outFileDir = outFileDir;
         this.synchronizedCounter = new SynchronizedCounter();
-        debug = Main.DEBUG_MODE;
+        debug = InvertedFileBuilder.DEBUG_MODE;
     }
 
     public Set<String> begin(DocumentHashTable.HashTableSizeInterface dhtSizeCalc) {

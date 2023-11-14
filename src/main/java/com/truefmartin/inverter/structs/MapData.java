@@ -24,4 +24,9 @@ public class MapData extends Writeable{
         System.out.println("DocID: " + this.docId + ", FileName: " + this.fileName);
     }
 
+    @Override
+    public boolean isEmpty() {
+        return this.docId.isEmpty() || this.docId.equals("-1");
+    }
+
 }

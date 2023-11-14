@@ -151,7 +151,7 @@ public class DocumentHashTable
         for (String stopword :
                 StopWords.getInstance().getStopList()) {
             int index = find(stopword);
-            if (hashtable[index].isNotEmpty() || hashtable[index].term.length() == 1) {
+            if (hashtable[index].isNotEmpty() || hashtable[index].term.trim().length() <= 1) {
                 sum += hashtable[index].setEmpty();
                 used--;
             }

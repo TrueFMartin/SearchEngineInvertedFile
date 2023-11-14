@@ -25,5 +25,10 @@ public class DictData extends Writeable{
     public void print(){
         System.out.println("Term: " + this.term + ", NumDocs: " + this.numDocs + ", Start: " + this.start);
     }
+
+    @Override
+    public boolean isEmpty() {
+        return this.numDocs.isEmpty() || this.numDocs.equals("-1");
+    }
 }
 

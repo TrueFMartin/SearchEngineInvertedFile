@@ -30,7 +30,12 @@ public abstract class Writeable {
         next = 0;
     }
 
+    public String getValue(int columnNumber) {
+        return columnNumber < columns.length? columns[columnNumber]: null;
+    }
+
     abstract protected void reassignFields();
     abstract public void print();
+    abstract public boolean isEmpty();
 
 }

@@ -49,7 +49,7 @@ while getopts "dch:-:" opt; do
           echo "Invalid option: --${OPTARG}"
           exit 1
           ;;
-      esac
+      esack
       ;;
     \?)
       echo "Invalid option: -$OPTARG"
@@ -67,6 +67,7 @@ fi
 
 echo "Creating output directory if not already present"
 mkdir $2 2>/dev/null
+mkdir config 2>/dev/null
 java_args=""
 if [[ ! -z $DEBUG ]]; then
   java_args="$java_args -debug"
@@ -81,15 +82,12 @@ if [[ ! -z $GHT_SIZE ]]; then
   java_args="$java_args -ght-size=$GHT_SIZE"
 fi
 
-time (java -jar target/hw4-1-spring-boot.jar $1 $2 $java_args)
-if [[ ! -z $GHT_SIZE ]]; then
-  java_args="$java_args -ght-size=$GHT_SIZE"
-fi
+time (java -jar target/hw4-2-spring-boot.jar build $1 $2 $java_args)
 
 if [[ "$CLEAR" == "true" ]]; then
   echo "Clearing temporary files"
-  rm -rd $2
+  rm $2/*.html
 else
   echo "Complete, temporary files in: $2"
-  echo "Map, Dict, and Post are in $(pwd)"
 fi
+echo "Map, Dict, and Post are in $(pwd)/config"

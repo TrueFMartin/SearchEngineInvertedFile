@@ -7,12 +7,9 @@ package com.truefmartin.inverter;
  * Modified by: Franklin True Martin for use in inversion algorithm.
  */
 
-import com.truefmartin.parser.HTMLParser;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class GlobalHashTable {
 
@@ -104,48 +101,6 @@ public class GlobalHashTable {
             fn.hashPrint(node.term, node.numDocs, node.start);
         }
     }
-
-    /**
-     * Prints the contents of the hashtable to the file given.
-     *
-     * @return StringBuilder of hash table with empty fields
-     */
-//    public StringBuilder print()
-//    {
-//
-//        StringBuilder out = new StringBuilder(size*20);
-//
-//        for(int i=0;i<size;i++)
-//        {
-//
-//            String termStr = hashtable[i].getTerm();
-//            int termSpaceSize = 1;
-//            if (termStr.length() > TERM_SIZE) {
-//                termStr = termStr.substring(0, TERM_SIZE);
-//            } else {
-//                termSpaceSize = TERM_SIZE - termStr.length() + 1;
-//            }
-//            String termSpace = " ".repeat(termSpaceSize);
-//            String numDocsStr = String.valueOf(hashtable[i].getNumDocs());
-//            if(numDocsStr.length() > NUM_DOCS_SIZE) {
-//                numDocsStr = "OVER";
-//            }
-//
-//            //May use when there are more than two columns
-////            int numDocsSpace = 1;
-////            if (numDocsStr.length() > FREQ_SIZE) {
-////                numDocsStr = numDocsStr.substring(0, FREQ_SIZE);
-////            } else {
-////                numDocsSpace = FREQ_SIZE - numDocsStr.length() + 1;
-////            }
-//
-//            out.append(termStr).append(termSpace).append(numDocsStr).append("\n");
-//        }
-//        return out;
-//
-////        System.out.println("Collisions: "+collision+" Used: "+used+" Lookups: "+lookups);
-//    }
-
 
     /**
      * Sort and remove all empty buckets.

@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Semaphore;
 
 /**
  * The type Raf table.
@@ -77,6 +79,9 @@ public class RafTable <T extends Writeable> implements AutoCloseable {
         }
     }
     private RafStatus status;
+
+
+
     private int numRecords;
     private final int RECORD_SIZE;
 
@@ -105,8 +110,8 @@ public class RafTable <T extends Writeable> implements AutoCloseable {
      * @param status         the status to open the stream as
      */
     public RafTable(String configFileName, String outFileName, RafStatus status) {
-        this.CONFIG_FILE_NAME = configFileName;
-        this.OUT_FILE_NAME = outFileName;
+        this.CONFIG_FILE_NAME = "config/" + configFileName;
+        this.OUT_FILE_NAME = "config/" + outFileName;
         this.status = status;
         String data;
         try (RandomAccessFile configStream = new RandomAccessFile(configFileName, "r")){
@@ -138,8 +143,8 @@ public class RafTable <T extends Writeable> implements AutoCloseable {
      * @param colSizes         the column sizes
      */
     public RafTable(String CONFIG_FILE_NAME, String OUT_FILE_NAME, RafStatus status, int... colSizes) {
-        this.CONFIG_FILE_NAME = CONFIG_FILE_NAME;
-        this.OUT_FILE_NAME = OUT_FILE_NAME;
+        this.CONFIG_FILE_NAME = "config/" + CONFIG_FILE_NAME;
+        this.OUT_FILE_NAME = "config/" + OUT_FILE_NAME;
         this.status = status;
         this.colSizes = colSizes;
         this.NUM_COLUMNS = colSizes.length;
@@ -181,8 +186,8 @@ public class RafTable <T extends Writeable> implements AutoCloseable {
         public Builder(String outFileName, String configFileName, RafStatus status, int numColumns) {
             this.NUM_COLUMNS = numColumns;
             this.colSizes = new int[NUM_COLUMNS];
-            this.OUT_FILE_NAME = outFileName;
-            this.CONFIG_FILE_NAME = configFileName;
+            this.OUT_FILE_NAME = "config/" + outFileName;
+            this.CONFIG_FILE_NAME = "config/" + configFileName;
             this.status = status;
             try {
                 if (status == RafStatus.READ)
@@ -269,11 +274,12 @@ public class RafTable <T extends Writeable> implements AutoCloseable {
     }
 
     /**
-     * Read boolean.
+     * Read one record at position recordNum, loading 'data' with results.
      *
      * @param recordNum the record num
-     * @param data      the data
-     * @return the boolean
+     * @param data      the data used to figure the column size, modified
+     *                  during reading with the results
+     * @return false if record num is outside of bounds
      */
     public boolean read(int recordNum, T data) {
         if ((recordNum < 0) || (recordNum >= numRecords)) {
@@ -298,6 +304,155 @@ public class RafTable <T extends Writeable> implements AutoCloseable {
             throw new RuntimeException(e);
         }
         return true;
+    }
+
+    /**
+     * Read multiple records starting at position recordNum,
+     * loading 'data[]' with results.
+     *
+     * @param recordNum the record num
+     * @param data      the data used to figure the column size, modified
+     *                  during reading with the results
+     * @return false if record num is outside of bounds
+     */
+    public boolean readBatch(int recordNum, T[] data) throws RowBoundsException, ColumnBoundsException{
+        if ((recordNum < 0) || (recordNum >= numRecords)) {
+            return false;
+        }
+        if (recordNum + data.length >= numRecords) {
+            throw new RowBoundsException("Miscalculated number of records." +
+                    "\nTried to read more than is available in file. " +
+                    data.getClass().getSimpleName() +
+                    "--Requested records: "  + recordNum + "-"
+                    + (recordNum + data.length) +
+                    ", actual available: " + numRecords);
+        }
+        try {
+            stream.seek((long) recordNum * RECORD_SIZE);
+            int rowIndex = 0;
+            String row;
+            while ((row = stream.readLine()) != null) {
+                if (rowIndex >= data.length) {
+                    break;
+                }
+                int columnCharIndex = 0;
+                for (int columnSize : colSizes) {
+                    if (!data[rowIndex].hasNext()) {
+                        throw new ColumnBoundsException("Number of columns for data type " + data.getClass().getName()
+                                + " does not match number of columns for RafTable: " + NUM_COLUMNS);
+                    }
+                    data[rowIndex].setNext(row.substring(columnCharIndex, columnSize + columnCharIndex).strip());
+                    // Next value will start from end of current value(columnSize + columnCharIndex) + 1 space.
+                    columnCharIndex = columnSize + columnCharIndex + 1;
+                }
+                data[rowIndex].resetNext();
+                rowIndex++;
+            }
+            } catch(IOException e){
+                throw new RuntimeException(e);
+            }
+        return true;
+    }
+
+    /**
+     * Read multiple records starting at position recordNum,
+     * offering 'int[]' int queue.
+     *
+     * @param recordNum the record num to start at
+     * @param numToRead the number of records to read
+     * @param queue     the queue to write to
+     * @param semaphore used to let queue consumer to start polling
+     * @return false if record num is outside of bounds
+     */
+    public boolean readBatchToQueue(int recordNum, int numToRead, ConcurrentLinkedQueue<int []> queue, Semaphore semaphore) throws RowBoundsException, ColumnBoundsException{
+        if ((recordNum < 0) || (recordNum >= numRecords)) {
+            return false;
+        }
+        if (recordNum + numToRead >= numRecords) {
+            throw new RowBoundsException("Miscalculated number of records." +
+                    "\nTried to read more than is available in file.");
+        }
+        try {
+            stream.seek((long) recordNum * RECORD_SIZE);
+            int numRead = 0;
+            String row;
+            int[] rowResult = new int[colSizes.length];
+            semaphore.release();
+            while ((row = stream.readLine()) != null && numRead < numToRead) {
+                int columnCharIndex = 0;
+                int colIndex = 0;
+                for (int columnSize : colSizes) {
+                    rowResult[colIndex++] = Integer.parseInt(row.substring(columnCharIndex, columnSize + columnCharIndex).strip());
+                    // Next value will start from end of current value(columnSize + columnCharIndex) + 1 space.
+                    columnCharIndex = columnSize + columnCharIndex + 1;
+                }
+                queue.offer(rowResult.clone());
+                numRead++;
+            }
+        } catch(IOException e){
+            throw new RuntimeException(e);
+        }
+        return true;
+    }
+    /**
+     * Read records until the desired result is found, or an empty record.
+     *
+     * @param recordNumStart the record num to start searching at
+     * @param data      the data used to figure the column size, modified
+     *                  during reading with the results
+     * @param desired the string to search for
+     * @param columnNumber the column in which the desired string is found in
+     * @return false if not found or recordNumStart is out of bounds, true otherwise
+     */
+    public boolean readAndFind(int recordNumStart, T data, String desired, int columnNumber) {
+        if ((recordNumStart < 0) || (recordNumStart >= numRecords)) {
+            return false;
+        }
+
+        try {
+            stream.seek((long) recordNumStart * RECORD_SIZE);
+            int currentRecord = recordNumStart - 1;
+            String row;
+            while((row = stream.readLine()) != null) {
+                currentRecord++;
+                int prevIndex = 0;
+                for (int columnSize : colSizes) {
+                    if (!data.hasNext()) {
+                        throw new ColumnBoundsException("Number of columns for data type " + data.getClass().getName()
+                                + " does not match number of columns for RafTable: " + NUM_COLUMNS);
+                    }
+                    data.setNext(row.substring(prevIndex, columnSize + prevIndex).strip());
+                    // Next value will start from end of current value(columnSize + prevIndex) + 1 space.
+                    prevIndex = columnSize + prevIndex + 1;
+                    }
+                data.resetNext();
+                // If empty result, desired was not found. Return false
+                if (data.isEmpty()) {
+                    return false;
+                }
+                // If the data is equal to desired, return true
+                if (data.getValue(columnNumber).equals(
+                        // Take substring of desired to match what is in records
+                        desired.substring(0, Math.min(colSizes[columnNumber], desired.length())))
+                ) {
+                    return true;
+                }
+                // If we reach end of records,
+                if(currentRecord == numRecords - 1) {
+                    currentRecord = -1;
+                    // Reset file to beginning
+                    stream.seek(0);
+                    continue;
+                }
+                // If we have traveled full circle and the result before where we started is not it,
+                if(currentRecord == recordNumStart - 1) {
+                    return false;
+                }
+            }
+            return false;
+        } catch (IOException | ColumnBoundsException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -370,5 +525,9 @@ public class RafTable <T extends Writeable> implements AutoCloseable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public int getNumRecords() {
+        return numRecords;
     }
 }

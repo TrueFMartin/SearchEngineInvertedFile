@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * The type Inverted file writer.
  */
-public class InvertedFileWriter {
+public class InvertedFileWriter implements AutoCloseable{
     /**
      * The Default token size.
      */
@@ -66,6 +66,11 @@ public class InvertedFileWriter {
     private RafTable rafMap;
     private RafTable rafDict;
     private RafTable rafPost;
+
+    @Override
+    public void close() throws Exception {
+        closeAfterWriting();
+    }
 
     public enum FileType {
         MAP, DICT, POST

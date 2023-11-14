@@ -35,15 +35,17 @@ public class Inverter {
         this.FILE_NAME_SIZE = 0;
         this.TERM_SIZE = 0;
         // ---------------------
-        // Write map file, can be in seperate thread, no shared, non-final resources
+        // Write map file, can be in separate thread, no shared, non-final resources
         new Thread(() -> {
             int index = 0;
-            InvertedFileWriter mapFileWriter = new InvertedFileWriter(InvertedFileWriter.FileType.MAP);
-            // Write map file
-            for (String fileName: fileNames) {
-                mapFileWriter.writeMapRecord(index++, Path.of(fileName).getFileName().toString());
+            try(var mapFileWriter = new InvertedFileWriter(InvertedFileWriter.FileType.MAP)) {
+                // Write map file
+                for (String fileName : fileNames) {
+                    mapFileWriter.writeMapRecord(index++, Path.of(fileName).getFileName().toString());
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-            mapFileWriter.closeAfterWriting();
         }).start();
         queue = new ConcurrentLinkedQueue<>();
         barrierLock = new Phaser();
@@ -111,10 +113,13 @@ public class Inverter {
             barrierLock.arriveAndDeregister();
             postWriterRunner.setStop(true);
             // Prepare to write dict file
-            InvertedFileWriter dictWriter = new InvertedFileWriter(InvertedFileWriter.FileType.DICT);
+        }
+        // Use AutoCloseable of InvFileWriter to ensure close in case of failure
+        try(var dictWriter = new InvertedFileWriter(InvertedFileWriter.FileType.DICT)) {
             // Write contents of hash file to dict file
             globalHashTable.printToAny(dictWriter::writeDictRecord);
-            dictWriter.closeAfterWriting();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
 
 

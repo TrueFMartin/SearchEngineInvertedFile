@@ -11,7 +11,7 @@ import java.nio.channels.FileChannel;
 import java.util.regex.Pattern;
 
 public class IRParserEvaluator extends IRParserBaseListener {
-    private final HTMLParser.SynchronizedCounter synchronizedCounter;
+    private HTMLParser.SynchronizedCounter synchronizedCounter;
     private String outputFileName;
     private int numUniqueTokens;
     private int numTokens;
@@ -25,7 +25,7 @@ public class IRParserEvaluator extends IRParserBaseListener {
     private static final Pattern CONTENT_START =
             Pattern.compile("[a-zA-z]+?\\s*?=\\s*?\"\\{?");
 
-
+    public IRParserEvaluator(){}
     public IRParserEvaluator(String inputFileName, String outFileDir, int hashSize, HTMLParser.SynchronizedCounter synchronizedCounter) {
         this.synchronizedCounter = synchronizedCounter;
         // Get inputFileName to be in form of "/fileName"
@@ -45,7 +45,7 @@ public class IRParserEvaluator extends IRParserBaseListener {
 
     // Called by every listener that has content to output,
     // Adds a new line and sets to lower case
-    private void toHashTable(String s) {
+    protected void toHashTable(String s) {
         hashTable.insert(s.toLowerCase(), 1);
         numTokens++;
     }
@@ -71,7 +71,7 @@ public class IRParserEvaluator extends IRParserBaseListener {
         return PUNCTUATION.matcher(s).replaceAll("");
     }
 
-    private void finish() throws FileNotFoundException {
+    protected void finish() throws FileNotFoundException {
         numUniqueTokens = hashTable.getNumUniqueTerms();
         if (hashTable.hasFailed()) {
             failedFromHash = true;
