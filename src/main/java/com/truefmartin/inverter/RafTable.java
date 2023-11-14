@@ -493,7 +493,7 @@ public class RafTable <T extends Writeable> implements AutoCloseable {
         numRecords = 0;
         closeFile();
         try {
-            Files.delete(Path.of(OUT_FILE_NAME));
+            Files.deleteIfExists(Path.of(OUT_FILE_NAME));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -527,7 +527,7 @@ public class RafTable <T extends Writeable> implements AutoCloseable {
             outString.append(colSize).append(' ');
         }
         try {
-            Files.delete(Path.of(CONFIG_FILE_NAME));
+            Files.deleteIfExists(Path.of("./" + CONFIG_FILE_NAME));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
