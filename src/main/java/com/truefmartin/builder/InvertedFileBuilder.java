@@ -42,7 +42,6 @@ public class InvertedFileBuilder {
         }
         if (debug)
             DEBUG_MODE=true;
-
     }
 
     public void begin() {

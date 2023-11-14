@@ -47,10 +47,20 @@ public class Query {
         queryArgs = Arrays.copyOfRange(args, numOptional, args.length);
     }
 
+    public boolean isValidArgs() {
+        return queryArgs != null && queryArgs.length != 0;
+    }
+
     public CompareType[] query() {
+        if(queryArgs == null || queryArgs.length == 0) {
+            return new CompareType[0];
+        }
         var invertedFileQuery = new InvertedFileQuerier(queryArgs, resultSize);
         var tokens = invertedFileQuery.parseTokens();
         var dictEntries = invertedFileQuery.queryDict(tokens);
+        if(dictEntries == null) {
+            return new CompareType[0];
+        }
         try {
             return invertedFileQuery.queryPost(dictEntries, accumulatorType);
 
