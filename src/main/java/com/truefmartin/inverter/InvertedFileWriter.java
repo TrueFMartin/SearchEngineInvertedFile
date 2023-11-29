@@ -36,7 +36,7 @@ public class InvertedFileWriter implements AutoCloseable{
     /**
      * The Default freq size.
      */
-    static final int DEFAULT_FREQ_SIZE = 9;
+    static final int DEFAULT_FREQ_SIZE = 4;
 
     /**
      * The Filename map.

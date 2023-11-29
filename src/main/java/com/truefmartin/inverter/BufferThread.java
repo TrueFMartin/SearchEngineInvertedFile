@@ -1,10 +1,11 @@
 package com.truefmartin.inverter;
 
 import java.util.AbstractMap;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Phaser;
 
 public class BufferThread implements Callable<Void> {
     LinkedList<SortedBuffer> buffers;
@@ -62,7 +63,7 @@ public class BufferThread implements Callable<Void> {
                     buffer.next();
                     break;
                 }
-                int weight = (int) (10E7 * entry.freq * idf);
+                int weight = (int) (1E4 * entry.freq * idf);
                 // Write a postings entry
                 queue.offer(new AbstractMap.SimpleEntry<>(entry.docID, weight));
                 // Update the latest term in buffer, increment the buffer

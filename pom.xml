@@ -44,12 +44,12 @@
                             <goal>repackage</goal>
                         </goals>
                         <configuration>
-                            <classifier>spring-boot</classifier>
+                            <classifier>inverted-file</classifier>
                             <mainClass>
                                 com.truefmartin.Main
                             </mainClass>
                             <finalName>
-                                hw4-2
+                                build
                             </finalName>
                         </configuration>
                     </execution>
