@@ -1,5 +1,6 @@
 /Users/truef/code/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/querier/accumulator/CustomCompare.java
 /Users/truef/code/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/querier/accumulator/AccumulatorHash.java
+/Users/truef/code/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/api/MainController.java
 /Users/truef/code/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/inverter/structs/PostData.java
 /Users/truef/code/ir/AntlrHW1Pt2/target/generated-sources/antlr4/com/truefmartin/IRParserListener.java
 /Users/truef/code/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/querier/accumulator/AccumulatorWithoutArray.java
@@ -34,5 +35,6 @@
 /Users/truef/code/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/inverter/SortedBuffer.java
 /Users/truef/code/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/querier/Query.java
 /Users/truef/code/ir/AntlrHW1Pt2/target/generated-sources/antlr4/com/truefmartin/IRParser.java
+/Users/truef/code/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/api/GreetingController.java
 /Users/truef/code/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/inverter/structs/DictData.java
 /Users/truef/code/ir/AntlrHW1Pt2/src/main/java/com/truefmartin/querier/FileNameRetriever.java

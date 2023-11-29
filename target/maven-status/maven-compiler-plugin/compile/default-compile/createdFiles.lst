@@ -1,6 +1,8 @@
+com/truefmartin/api/MainController.class
 com/truefmartin/inverter/structs/MapData.class
 com/truefmartin/parser/IRParserEvaluator.class
 com/truefmartin/parser/HTMLParser.class
+com/truefmartin/api/GreetingController.class
 com/truefmartin/inverter/structs/PostData.class
 com/truefmartin/inverter/RafTable$Builder.class
 com/truefmartin/inverter/InvertedFileReader.class

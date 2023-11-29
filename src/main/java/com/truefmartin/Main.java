@@ -4,11 +4,37 @@ import com.truefmartin.builder.InvertedFileBuilder;
 import com.truefmartin.querier.FileNameRetriever;
 import com.truefmartin.querier.Query;
 import com.truefmartin.querier.accumulator.CompareType;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 
-import java.util.*;
-
+import java.util.AbstractMap;
+import java.util.Arrays;
+import java.util.List;
+@SpringBootApplication
 public class Main {
+
     public static void main(String[] args) {
+        SpringApplication.run(Main.class, args);
+    }
+    @Bean
+    public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+        return args -> {
+
+            System.out.println("Let's inspect the beans provided by Spring Boot:");
+
+            String[] beanNames = ctx.getBeanDefinitionNames();
+            Arrays.sort(beanNames);
+            for (String beanName : beanNames) {
+                System.out.println(beanName);
+            }
+
+        };
+    }
+    public void Query(String[] args) {
+
         if (args.length == 0) {
             System.out.println("No arguments passed in. Pass in either 'query' or 'build' with their relevant args");
             return;
