@@ -82,7 +82,7 @@ if [[ ! -z $GHT_SIZE ]]; then
   java_args="$java_args -ght-size=$GHT_SIZE"
 fi
 
-time (java -jar target/hw4-2-spring-boot.jar build $1 $2 $java_args)
+time (java -jar target/query-api.jar build $1 $2 $java_args)
 
 if [[ "$CLEAR" == "true" ]]; then
   echo "Clearing temporary files"

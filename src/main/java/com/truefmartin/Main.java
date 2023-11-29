@@ -5,7 +5,6 @@ import com.truefmartin.querier.FileNameRetriever;
 import com.truefmartin.querier.Query;
 import com.truefmartin.querier.accumulator.CompareType;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +16,8 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        SpringApplication.run(Main.class, args);
+        Query(args);
+//        SpringApplication.run(Main.class, args);
     }
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
@@ -33,7 +33,7 @@ public class Main {
 
         };
     }
-    public void Query(String[] args) {
+    public static void Query(String[] args) {
 
         if (args.length == 0) {
             System.out.println("No arguments passed in. Pass in either 'query' or 'build' with their relevant args");
